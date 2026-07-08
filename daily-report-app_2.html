@@ -110,13 +110,13 @@
     font-size:13px; cursor:pointer;
   }
   .thumbs{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
-  .thumb{position:relative; width:140px;}
-  .thumb img{width:140px; height:140px; object-fit:cover; border-radius:8px; border:1px solid var(--border);}
+  .thumb{position:relative; width:180px;} /* Increased from 140px */
+  .thumb img{width:180px; height:180px; object-fit:cover; border-radius:8px; border:1px solid var(--border);} /* Increased from 140px */
   .thumb button{
-    position:absolute; top:-7px; left:-7px; width:24px; height:24px; border-radius:50%;
-    background:var(--bad); color:#fff; border:none; font-size:14px; cursor:pointer; line-height:1;
+    position:absolute; top:-7px; left:-7px; width:28px; height:28px; border-radius:50%; /* Slightly bigger */
+    background:var(--bad); color:#fff; border:none; font-size:16px; cursor:pointer; line-height:1;
   }
-  .thumb input{width:140px; font-size:11.5px; margin-top:4px; padding:5px; border:1px solid var(--border); border-radius:5px;}
+  .thumb input{width:180px; font-size:11.5px; margin-top:4px; padding:5px; border:1px solid var(--border); border-radius:5px;} /* Increased from 140px */
 
   .purchase-row{display:flex; gap:8px; margin-bottom:8px; align-items:center; flex-wrap:wrap;}
   .purchase-row input{padding:8px 9px; border:1px solid var(--border); border-radius:7px; background:var(--surface-2); font-family:'Tajawal',sans-serif; font-size:13.5px;}
@@ -147,9 +147,130 @@
   .btn-outline{background:transparent; color:var(--ink); border-color:var(--border);}
   .btn-outline:hover{border-color:var(--ink);}
   footer.note{text-align:center; color:var(--ink-faint); font-size:12px; padding:20px 0 0;}
+
+  /* --- developer credit + info bar --- */
+  .dev-credit {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .dev-credit .left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+  }
+  .dev-credit .left strong {
+    color: var(--accent-dark);
+    font-family: 'Cairo', sans-serif;
+  }
+  .dev-credit .left .badge {
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    padding: 2px 10px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .dev-credit .contact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    padding: 4px 12px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+    direction: ltr;
+  }
+  .dev-credit .contact span {
+    direction: rtl;
+  }
+
+  /* save-state toggle */
+  .save-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0 4px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .save-toggle-wrap input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .save-toggle-wrap label {
+    cursor: pointer;
+    user-select: none;
+  }
+  .save-toggle-wrap .hint {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* --- brand new: "من أنا" header in the page (instead of image) --- */
+  .whoami-strip {
+    background: var(--accent-soft);
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    border-right: 4px solid var(--accent);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    font-size: 13.5px;
+  }
+  .whoami-strip .me {
+    font-weight: 700;
+    color: var(--accent-dark);
+    font-family: 'Cairo', sans-serif;
+  }
+  .whoami-strip .role {
+    background: var(--surface);
+    padding: 0 10px;
+    border-radius: 30px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .whoami-strip .contact-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface);
+    padding: 2px 12px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    direction: ltr;
+    font-weight: 500;
+  }
+  .whoami-strip .contact-badge span {
+    direction: rtl;
+  }
+
   @media (max-width:640px){
     .ticker{min-width:0;}
     header .top{align-items:center;}
+    .dev-credit{flex-direction:column; align-items:stretch; text-align:center;}
+    .dev-credit .left{justify-content:center;}
+    .dev-credit .contact{justify-content:center;}
+    .whoami-strip{flex-direction:column; align-items:flex-start;}
+    .thumb{width:140px;} /* fallback for mobile */
+    .thumb img{width:140px; height:140px;}
+    .thumb input{width:140px;}
   }
 </style>
 </head>
@@ -177,6 +298,17 @@
 </header>
 
 <main class="wrap">
+
+  <!-- ===================== WHO AM I (من أنا) ===================== -->
+
+  <div class="whoami-strip">
+    <span class="me"> تم تصميم هذا النظام بواسط</span>
+    <span class="me"> م.منصور أنيس القحطاني</span>
+    <span class="role">مطور برمجيات  Full Stack</span>
+    <span class="role">مهندس تقني معلومات</span>
+    <span class="contact-badge">📞 <span>0557771329</span> <span style="font-size:11px;color:var(--ink-soft);">واتس &amp; اتصال</span></span>
+   
+  </div>
 
   <!-- ===================== التقرير اليومي ===================== -->
   <section class="panel active" id="panel-report">
@@ -316,6 +448,26 @@
         <button class="btn btn-primary" id="btnNextDay">تجهيز بيانات اليوم التالي</button>
         <button class="btn btn-outline" id="btnReset">تفريغ اليوم</button>
       </div>
+
+      <!-- ========== toggle: remember fields in localStorage ========== -->
+      <div class="save-toggle-wrap">
+        <input type="checkbox" id="chkRememberFields">
+        <label for="chkRememberFields">تذكر كل الحقول تلقائيًا (مثل "تذكرني")</label>
+        <span class="hint">— يحفظ البيانات في متصفحك حتى بعد الخروج</span>
+      </div>
+    </div>
+
+    <!-- developer credit: منصور أنيس القحطاني -->
+    <div class="dev-credit">
+      <div class="left">
+        <strong>منصور أنيس القحطاني</strong>
+        <span class="badge">مطور برمجيات فول ستاك</span>
+        <span class="badge">مهندس تقني معلومات</span>
+      </div>
+      <div class="contact">
+        <span>📞 557771329</span>
+        <span>واتس &amp; اتصال</span>
+      </div>
     </div>
   </section>
 
@@ -367,6 +519,41 @@ const headerFieldIds = {
 function num(v){ const n = parseFloat(v); return isNaN(n) ? 0 : n; }
 function fmt(n){ return n.toLocaleString('ar-SA', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 
+/* ---------- auto-save to localStorage (like "تذكرني") ---------- */
+const LS_KEY = 'inventoryAppState';
+function saveToLocalStorage(){
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  } catch(e){ /* ignore quota */ }
+}
+function loadFromLocalStorage(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    Object.assign(state, data);
+    return true;
+  } catch(e){ return false; }
+}
+
+/* apply state to UI (also used after JSON import) */
+function applyStateToUI(){
+  state.header.purchasesList = state.header.purchasesList || [];
+  Object.entries(headerFieldIds).forEach(([key,id])=>{
+    document.getElementById(id).value = state.header[key]??'';
+  });
+  itemsData.forEach(it=>{
+    const v = state.items[it.id] || {beg:0,purch:0,remain:0,damaged:0};
+    state.items[it.id]=v;
+    document.querySelectorAll(`input[data-id="${it.id}"]`).forEach(inp=>{ inp.value = v[inp.dataset.f]||0; });
+    renderItemSales(it.id);
+  });
+  attCats.forEach(cat=> renderThumbs(cat.key));
+  renderPurchases();
+  recalcHeader();
+  renderDeptSummary();
+}
+
 /* ---------- tabs ---------- */
 document.querySelectorAll('nav.tabs button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -384,7 +571,11 @@ document.getElementById('f_date').value = new Date().toISOString().slice(0,10);
 /* ---------- header inputs ---------- */
 Object.entries(headerFieldIds).forEach(([key, id])=>{
   const el = document.getElementById(id);
-  el.addEventListener('input', ()=>{ state.header[key] = el.value; recalcHeader(); });
+  el.addEventListener('input', ()=>{
+    state.header[key] = el.value;
+    recalcHeader();
+    if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
+  });
 });
 
 function purchasesTotal(){
@@ -428,6 +619,7 @@ function renderPurchases(){
       const idx = inp.dataset.idx, f = inp.dataset.f;
       state.header.purchasesList[idx][f] = inp.value;
       recalcHeader();
+      if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
     });
   });
   wrap.querySelectorAll('button').forEach(b=>{
@@ -435,6 +627,7 @@ function renderPurchases(){
       state.header.purchasesList.splice(b.dataset.idx,1);
       renderPurchases();
       recalcHeader();
+      if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
     });
   });
 }
@@ -442,6 +635,7 @@ document.getElementById('btnAddPurchase').addEventListener('click', ()=>{
   state.header.purchasesList = state.header.purchasesList || [];
   state.header.purchasesList.push({name:'', price:0, note:''});
   renderPurchases();
+  if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
 });
 
 /* ---------- items table ---------- */
@@ -471,6 +665,7 @@ itemsBody.querySelectorAll('input').forEach(inp=>{
     state.items[id][f] = num(inp.value);
     renderItemSales(id);
     renderDeptSummary();
+    if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
   });
 });
 function itemSales(v){ return num(v.beg)+num(v.purch)-num(v.remain)-num(v.damaged); }
@@ -539,6 +734,7 @@ attCats.forEach(cat=>{
       if(dataUrl){
         state.attachments[cat.key].push({name:file.name, dataUrl, note:''});
         renderThumbs(cat.key);
+        if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
       }
     }
     e.target.value='';
@@ -560,11 +756,13 @@ function renderThumbs(catKey){
     b.addEventListener('click', ()=>{
       state.attachments[b.dataset.cat].splice(b.dataset.idx,1);
       renderThumbs(b.dataset.cat);
+      if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
     });
   });
   wrap.querySelectorAll('input[type=text]').forEach(i=>{
     i.addEventListener('input', ()=>{
       state.attachments[i.dataset.cat][i.dataset.idx].note = i.value;
+      if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
     });
   });
 }
@@ -595,6 +793,19 @@ function renderSummary(){
 document.getElementById('btnExcel').addEventListener('click', ()=>{
   const h = state.header;
   const wb = XLSX.utils.book_new();
+  
+  // ====== WHOAMI CREDIT STRIP as first sheet ======
+  const creditRows = [
+    ['تم تصميم هذا النظام بواسط'],
+    ['م.منصور أنيس القحطاني'],
+    ['مطور برمجيات Full Stack'],
+    ['مهندس تقني معلومات'],
+    ['📞 0557771329 - واتس واتصال'],
+    ['----------------------------------------'],
+    []
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(creditRows), 'من نحن');
+
   const headerRows = [
     ['التاريخ', h.date||''], ['اسم الكاشير', h.cashier||''],
     ['المبلغ المباع كاش', num(h.cash)], ['العهدة السابقة', num(h.prevFloat)],
@@ -635,8 +846,6 @@ document.getElementById('btnPdf').addEventListener('click', async ()=>{
   btn.disabled = true; btn.textContent = 'جارِ التصدير...';
   let hideWrap = null;
   try{
-    /* wrap in a zero-height clipping box so it never flashes on screen,
-       but stays fully laid out (unlike display:none) so html2canvas can read it */
     hideWrap = document.createElement('div');
     hideWrap.style.cssText = 'height:0; overflow:hidden;';
     const container = document.createElement('div');
@@ -645,8 +854,6 @@ document.getElementById('btnPdf').addEventListener('click', async ()=>{
     hideWrap.appendChild(container);
     document.body.appendChild(hideWrap);
 
-    /* make sure every embedded image (attachments) has finished decoding
-       and the browser has painted a layout pass before we snapshot */
     const imgs = Array.from(container.querySelectorAll('img'));
     await Promise.all(imgs.map(img => img.decode ? img.decode().catch(()=>{}) : Promise.resolve()));
     await new Promise(r => requestAnimationFrame(()=>requestAnimationFrame(r)));
@@ -689,7 +896,20 @@ function buildPrintHTML(){
   const th = 'style="border:1px solid #ccc;padding:4px;background:#f2ede2;text-align:right;"';
   const td = 'style="border:1px solid #ccc;padding:4px;text-align:right;"';
 
-  let html = `<h2 style="font-size:16px;margin:0 0 6px;">تقرير الجرد اليومي — ${h.date||''}</h2>
+  // ======== WHOAMI STRIP at the VERY TOP of PDF ========
+  let html = `
+  <div style="background:#f3dcc9;border-right:4px solid #C1531B;border-radius:8px;padding:12px 18px;margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;font-size:13.5px;font-family:Tajawal,sans-serif;">
+    <span style="font-weight:700;color:#8C3A10;font-family:Cairo,sans-serif;">تم تصميم هذا النظام بواسط</span>
+    <span style="font-weight:700;color:#8C3A10;font-family:Cairo,sans-serif;">م.منصور أنيس القحطاني</span>
+    <span style="background:#fffdf8;padding:0 10px;border-radius:30px;font-size:12px;border:1px solid #E1D6BE;font-weight:500;">مطور برمجيات Full Stack</span>
+    <span style="background:#fffdf8;padding:0 10px;border-radius:30px;font-size:12px;border:1px solid #E1D6BE;font-weight:500;">مهندس تقني معلومات</span>
+    <span style="display:inline-flex;align-items:center;gap:5px;background:#fffdf8;padding:2px 12px;border-radius:30px;border:1px solid #E1D6BE;direction:ltr;font-weight:500;">
+      📞 <span style="direction:rtl;">0557771329</span> <span style="font-size:11px;color:#736A5C;">واتس &amp; اتصال</span>
+    </span>
+  </div>
+  `;
+
+  html += `<h2 style="font-size:16px;margin:0 0 6px;">تقرير الجرد اليومي — ${h.date||''}</h2>
   <p style="font-size:12px;color:#555;margin:0 0 14px;">الكاشير: ${h.cashier||''}</p>
   <table style="${tableStyle}">
     <tr><td ${td}>كاش</td><td ${td}>${fmt(num(h.cash))}</td><td ${td}>شبكة</td><td ${td}>${fmt(num(h.network))}</td></tr>
@@ -732,29 +952,21 @@ function buildPrintHTML(){
 
 /* ---------- save / import json ---------- */
 document.getElementById('btnSaveJson').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(state)], {type:'application/json'});
+  // Add whoami info to the JSON export as a header field
+  const exportState = JSON.parse(JSON.stringify(state));
+  exportState._whoami = {
+    designer: 'م.منصور أنيس القحطاني',
+    role1: 'مطور برمجيات Full Stack',
+    role2: 'مهندس تقني معلومات',
+    contact: '0557771329'
+  };
+  const blob = new Blob([JSON.stringify(exportState)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = `نسخة-${state.header.date||'اليوم'}.json`;
   a.click();
   URL.revokeObjectURL(url);
 });
-function applyStateToUI(){
-  state.header.purchasesList = state.header.purchasesList || [];
-  Object.entries(headerFieldIds).forEach(([key,id])=>{
-    document.getElementById(id).value = state.header[key]||'';
-  });
-  itemsData.forEach(it=>{
-    const v = state.items[it.id] || {beg:0,purch:0,remain:0,damaged:0};
-    state.items[it.id]=v;
-    document.querySelectorAll(`input[data-id="${it.id}"]`).forEach(inp=>{ inp.value = v[inp.dataset.f]||0; });
-    renderItemSales(it.id);
-  });
-  attCats.forEach(cat=> renderThumbs(cat.key));
-  renderPurchases();
-  recalcHeader();
-  renderDeptSummary();
-}
 
 document.getElementById('importJson').addEventListener('change', (e)=>{
   const file = e.target.files[0];
@@ -763,9 +975,12 @@ document.getElementById('importJson').addEventListener('change', (e)=>{
   reader.onload = ()=>{
     try{
       const data = JSON.parse(reader.result);
+      // Remove _whoami if present (it's metadata, not state)
+      delete data._whoami;
       Object.assign(state, data);
       applyStateToUI();
       alert('تم استيراد النسخة بنجاح (تشمل الصور).');
+      if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
     }catch(err){ alert('تعذّر قراءة الملف: '+err.message); }
   };
   reader.readAsText(file);
@@ -800,7 +1015,6 @@ function findItemMatch(dept, name){
   return itemsData.find(it=> it.dept===nDept && it.name===nName);
 }
 
-/* format A: files exported by this app (has a 'التقرير اليومي' sheet) */
 function parseOwnFormatWorkbook(wb){
   const newHeader = {purchasesList:[]};
   const reportSheet = wb.Sheets['التقرير اليومي'];
@@ -838,7 +1052,6 @@ function parseOwnFormatWorkbook(wb){
   return {header:newHeader, items:newItems, attCount, note:attCount>0 ? `كانت هناك ${attCount} صورة مرفقة في النسخة الأصلية — الإكسل لا يخزّن الصور نفسها، فيلزم إعادة رفعها يدويًا من تبويب المرفقات إن احتجتها.` : ''};
 }
 
-/* format B: the original restaurant template (single sheet, free-text notes) */
 function parseLegacyWorkbook(wb){
   let target = null;
   for(const name of wb.SheetNames){
@@ -899,6 +1112,7 @@ document.getElementById('importExcel').addEventListener('change', (e)=>{
     try{
       const wb = XLSX.read(reader.result, {type:'array'});
       const result = wb.Sheets['التقرير اليومي'] ? parseOwnFormatWorkbook(wb) : parseLegacyWorkbook(wb);
+     
       if(!result){
         alert('تعذّر التعرف على تنسيق هذا الملف. تأكد أنه ملف Excel صادر من هذا الموقع أو بنفس تنسيق نموذج الجرد اليومي الأصلي.');
         return;
@@ -908,6 +1122,7 @@ document.getElementById('importExcel').addEventListener('change', (e)=>{
       state.attachments = {purchases:[], external:[], keeta:[], hunger:[]};
       applyStateToUI();
       alert('تم استرداد البيانات بنجاح.' + (result.note ? '\n\n'+result.note : ''));
+      if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
     }catch(err){ alert('تعذّر قراءة ملف الإكسل: '+err.message); }
   };
   reader.readAsArrayBuffer(file);
@@ -954,13 +1169,35 @@ document.getElementById('btnNextDay').addEventListener('click', ()=>{
   renderDeptSummary();
   document.querySelector('nav.tabs button[data-tab="report"]').click();
   alert('تم تجهيز بيانات يوم '+nextDate+'. العهدة السابقة والمتبقي انتقلا تلقائيًا.');
+  if(document.getElementById('chkRememberFields').checked) saveToLocalStorage();
 });
 
-/* ---------- initial render ---------- */
-renderPurchases();
-recalcHeader();
-renderDeptSummary();
-itemsData.forEach(it=>renderItemSales(it.id));
+/* ---------- "تذكرني" toggle: load on page start if checked ---------- */
+document.getElementById('chkRememberFields').addEventListener('change', function(){
+  if(this.checked){
+    if(loadFromLocalStorage()){
+      applyStateToUI();
+      alert('تم استعادة آخر نسخة محفوظة.');
+    } else {
+      saveToLocalStorage();
+    }
+  } else {
+    localStorage.removeItem(LS_KEY);
+  }
+});
+
+/* ---------- initial render + try auto-load ---------- */
+const autoLoaded = loadFromLocalStorage();
+if(autoLoaded){
+  applyStateToUI();
+  document.getElementById('chkRememberFields').checked = true;
+} else {
+  renderPurchases();
+  recalcHeader();
+  renderDeptSummary();
+  itemsData.forEach(it=>renderItemSales(it.id));
+}
+
 </script>
 </body>
 </html>
