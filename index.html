@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الرواتب والعمال — مضغوط بلادي</title>
+<title>الجرد والتقرير اليومي — مضغوط بلادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -15,80 +15,136 @@
     --ink:#2B2420; --ink-soft:#736A5C; --ink-faint:#A79E8E; --border:#E1D6BE;
     --accent:#C1531B; --accent-dark:#8C3A10; --accent-soft:#F3DCC9;
     --good:#4E6B41; --good-soft:#E4EEDD; --bad:#9A342A; --bad-soft:#F6DFDA;
-    --plus:#3E6B8C; --plus-soft:#DCE9F1;
     --radius:10px;
   }
   *{box-sizing:border-box;}
-  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:15px; line-height:1.6; padding-bottom:60px;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Tajawal',sans-serif; font-size:15px; line-height:1.6;
+    padding-bottom:60px;
+  }
   h1,h2,h3{font-family:'Cairo',sans-serif; margin:0; font-weight:700;}
-  .wrap{max-width:1080px; margin:0 auto; padding:0 16px;}
+  .wrap{max-width:1020px; margin:0 auto; padding:0 16px;}
 
   header{background:var(--ink); color:#F3ECDE; padding:22px 0 0;}
   header .top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; padding-bottom:18px;}
   header .brand{display:flex; flex-direction:column; gap:4px;}
   header .brand .eyebrow{font-size:12px; color:#C7BBA5; letter-spacing:.5px;}
   header .brand h1{font-size:22px; color:#F8F2E6;}
-  .ticker{background:#1B1712; border:1px solid #3A322A; border-radius:var(--radius); padding:10px 18px; text-align:left; min-width:230px;}
+  .ticker{
+    background:#1B1712; border:1px solid #3A322A; border-radius:var(--radius);
+    padding:10px 18px; text-align:left; min-width:260px;
+  }
   .ticker .label{font-size:11px; color:#B7AC96; margin-bottom:2px;}
-  .ticker .value{font-family:'Cairo',sans-serif; font-size:24px; font-weight:800; letter-spacing:1px; color:var(--accent);}
+  .ticker .value{
+    font-family:'Cairo',sans-serif; font-size:24px; font-weight:800; letter-spacing:1px;
+    color:var(--accent);
+  }
+  .ticker .value.bad{color:#E8776A;}
+  .ticker .value.good{color:#8FBB74;}
 
   nav.tabs{display:flex; gap:4px; overflow-x:auto; padding-top:6px;}
-  nav.tabs button{appearance:none; border:none; background:transparent; color:#C7BBA5; font-family:'Cairo',sans-serif; font-weight:600; font-size:14px; padding:12px 18px; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent;}
+  nav.tabs button{
+    appearance:none; border:none; background:transparent; color:#C7BBA5;
+    font-family:'Cairo',sans-serif; font-weight:600; font-size:14px;
+    padding:12px 18px; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent;
+  }
   nav.tabs button.active{color:#F8F2E6; border-bottom-color:var(--accent);}
+  nav.tabs button.link-out{color:var(--accent);}
 
   main{padding-top:22px;}
   section.panel{display:none;}
   section.panel.active{display:block;}
 
-  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:16px;}
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px; margin-bottom:16px;
+  }
   .card h2{font-size:16px; margin-bottom:14px; display:flex; align-items:center; gap:8px;}
-  .card h2 .n{display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:var(--accent-soft); color:var(--accent-dark); font-size:12px; font-weight:800;}
+  .card h2 .n{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:50%; background:var(--accent-soft); color:var(--accent-dark);
+    font-size:12px; font-weight:800;
+  }
   .card p.hint{color:var(--ink-soft); font-size:13px; margin:-8px 0 14px;}
 
-  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px;}
   .field label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px;}
-  .field input, .field select, .field textarea{width:100%; padding:9px 10px; border:1px solid var(--border); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:14.5px;}
-  .field input:focus, .field select:focus{outline:2px solid var(--accent); outline-offset:1px;}
+  .field input, .field textarea, .field select{
+    width:100%; padding:9px 10px; border:1px solid var(--border); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:14.5px;
+  }
+  .field input:focus, .field textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+  .field input[readonly]{background:#EFE7D6; color:var(--ink-soft); font-weight:700;}
   .field.wide{grid-column:1/-1;}
-  .field.hidden{display:none;}
+
+  .subgroup{border:1px dashed var(--border); border-radius:10px; padding:14px; background:var(--surface-2);}
+  .subgroup h3{font-size:13.5px; margin-bottom:10px; color:var(--accent-dark);}
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:640px){ .two-col{grid-template-columns:1fr;} }
 
   table{width:100%; border-collapse:collapse; font-size:13.5px;}
-  thead th{background:var(--surface-2); color:var(--ink-soft); font-weight:700; font-size:12px; text-align:right; padding:8px 6px; border-bottom:1px solid var(--border); white-space:nowrap;}
+  thead th{
+    background:var(--surface-2); color:var(--ink-soft); font-weight:700; font-size:12px;
+    text-align:right; padding:8px 6px; border-bottom:1px solid var(--border); white-space:nowrap;
+  }
   tbody td{padding:6px; border-bottom:1px solid var(--border); vertical-align:middle;}
-  tbody td input, tbody td select{width:100%; min-width:70px; padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2); font-size:13px;}
-  tbody td input:disabled{background:#EDE6D6; color:var(--ink-faint);}
-  tbody td.calc{font-weight:700; font-family:'Cairo',sans-serif;}
+  tbody tr.dept-row td{background:var(--accent-soft); font-family:'Cairo',sans-serif; font-weight:700; color:var(--accent-dark); font-size:12.5px;}
+  tbody td input{width:72px; padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2); font-size:13.5px;}
+  tbody td input.price-input{width:64px;}
+  tbody td input.price-missing{border-color:var(--bad); background:var(--bad-soft);}
+  tbody td.calc{font-weight:700;}
   tbody td.calc.neg{color:var(--bad);}
-  tbody td.calc.pos{color:var(--good);}
+  tbody td.calc.money{color:var(--accent-dark);}
   tfoot td{padding:8px 6px; font-family:'Cairo',sans-serif; font-weight:700; border-top:2px solid var(--ink);}
-  .del-btn{width:26px; height:26px; border-radius:50%; border:none; background:var(--bad); color:#fff; cursor:pointer; font-size:14px; flex-shrink:0;}
-  .mini-btn{width:24px; height:24px; border-radius:50%; border:1px solid var(--border); background:var(--surface-2); color:var(--ink-soft); cursor:pointer; font-size:12px; flex-shrink:0;}
-  .cell-flex{display:flex; align-items:center; gap:4px;}
-  .tag{display:inline-block; padding:3px 9px; border-radius:20px; font-size:11.5px; font-weight:700; font-family:'Cairo',sans-serif;}
-  .tag.deduction{background:var(--bad-soft); color:var(--bad);}
-  .tag.withdrawal{background:var(--plus-soft); color:var(--plus);}
-  .tag.incentive{background:var(--good-soft); color:var(--good);}
-  .tag.overtime{background:var(--accent-soft); color:var(--accent-dark);}
+
+  .att-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px;}
+  .att-cat{border:1px dashed var(--border); border-radius:var(--radius); padding:14px; background:var(--surface-2);}
+  .att-cat h3{font-size:14px; margin-bottom:4px;}
+  .att-cat .desc{font-size:12px; color:var(--ink-soft); margin-bottom:10px;}
+  .upload-btn{
+    display:inline-flex; align-items:center; gap:6px; background:var(--accent); color:#fff;
+    border:none; padding:8px 14px; border-radius:8px; font-family:'Cairo',sans-serif; font-weight:700;
+    font-size:13px; cursor:pointer;
+  }
+  .thumbs{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .thumb{position:relative; width:180px;}
+  .thumb img{width:180px; height:180px; object-fit:cover; border-radius:8px; border:1px solid var(--border);}
+  .thumb button{
+    position:absolute; top:-7px; left:-7px; width:28px; height:28px; border-radius:50%;
+    background:var(--bad); color:#fff; border:none; font-size:16px; cursor:pointer; line-height:1;
+  }
+  .thumb input{width:180px; font-size:11.5px; margin-top:4px; padding:5px; border:1px solid var(--border); border-radius:5px;}
+
+  .purchase-row{display:flex; gap:8px; margin-bottom:8px; align-items:center; flex-wrap:wrap;}
+  .purchase-row input{padding:8px 9px; border:1px solid var(--border); border-radius:7px; background:var(--surface-2); font-family:'Tajawal',sans-serif; font-size:13.5px;}
+  .purchase-row input.p-name{flex:2; min-width:120px;}
+  .purchase-row input.p-price{width:110px;}
+  .purchase-row input.p-note{flex:2; min-width:120px;}
+  .purchase-row button{
+    width:26px; height:26px; border-radius:50%; border:none; background:var(--bad); color:#fff;
+    cursor:pointer; font-size:13px; flex-shrink:0;
+  }
 
   .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:16px;}
   .kpi{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px;}
   .kpi .label{font-size:12px; color:var(--ink-soft); margin-bottom:6px;}
   .kpi .value{font-family:'Cairo',sans-serif; font-size:20px; font-weight:800;}
+  .kpi.alert{border-color:var(--bad); background:var(--bad-soft);}
+  .kpi.alert .value{color:var(--bad);}
+  .kpi.ok{border-color:var(--good); background:var(--good-soft);}
+  .kpi.ok .value{color:var(--good);}
 
   .actions{display:flex; gap:10px; flex-wrap:wrap;}
-  .btn{font-family:'Cairo',sans-serif; font-weight:700; font-size:14px; border-radius:9px; padding:11px 18px; border:1px solid transparent; cursor:pointer; display:inline-flex; align-items:center; gap:8px;}
+  .btn{
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:14px; border-radius:9px; padding:11px 18px;
+    border:1px solid transparent; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  }
   .btn-primary{background:var(--accent); color:#fff;}
   .btn-primary:hover{background:var(--accent-dark);}
   .btn-outline{background:transparent; color:var(--ink); border-color:var(--border);}
   .btn-outline:hover{border-color:var(--ink);}
-  .seg{display:flex; border:1px solid var(--border); border-radius:9px; overflow:hidden; width:fit-content;}
-  .seg button{border:none; background:var(--surface-2); color:var(--ink-soft); font-family:'Cairo',sans-serif; font-weight:700; font-size:13.5px; padding:9px 18px; cursor:pointer;}
-  .seg button.active{background:var(--accent); color:#fff;}
-  .breakdown{margin-top:16px;}
-  .breakdown h3{font-size:13.5px; margin-bottom:8px; color:var(--ink-soft);}
-  .breakdown-emp{border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin-bottom:10px; background:var(--surface-2);}
-  .breakdown-emp .name{font-family:'Cairo',sans-serif; font-weight:700; margin-bottom:6px;}
-  .breakdown-row{display:flex; justify-content:space-between; font-size:12.5px; padding:3px 0; border-bottom:1px dashed var(--border); gap:10px;}
+  footer.note{text-align:center; color:var(--ink-faint); font-size:12px; padding:20px 0 0;}
 
   .dev-credit-bar{
     display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
@@ -102,8 +158,20 @@
   }
   .dev-credit-bar .pill.name{color:var(--ink); font-weight:800;}
   .dev-credit-bar .pill.phone{color:var(--accent-dark); font-weight:700;}
-  @media (max-width:640px){ .dev-credit-bar{justify-content:center;} }
-  footer.note{text-align:center; color:var(--ink-faint); font-size:12px; padding:20px 0 0;}
+
+  .save-toggle-wrap{display:flex; align-items:center; gap:8px; margin:12px 0 4px; font-size:13px; color:var(--ink-soft); flex-wrap:wrap;}
+  .save-toggle-wrap input[type="checkbox"]{width:18px; height:18px; accent-color:var(--accent); cursor:pointer;}
+  .save-toggle-wrap label{cursor:pointer; user-select:none;}
+  .save-toggle-wrap .hint{font-size:12px; color:var(--ink-faint);}
+
+  @media (max-width:640px){
+    .ticker{min-width:0;}
+    header .top{align-items:center;}
+    .dev-credit-bar{justify-content:center;}
+    .thumb{width:140px;}
+    .thumb img{width:140px; height:140px;}
+    .thumb input{width:140px;}
+  }
 </style>
 </head>
 <body>
@@ -112,27 +180,20 @@
   <div class="wrap top">
     <div class="brand">
       <div class="eyebrow">مطعم مضغوط بلادي</div>
-      <h1>الرواتب والعمال</h1>
+      <h1>الجرد والتقرير اليومي</h1>
     </div>
     <div class="ticker">
-      <div class="label">صافي رواتب الشهر الحالي</div>
+      <div class="label">فرق المبيعات (كاش + شبكة) عن صافي جرد الأقسام (بعد استبعاد كيتا وهنجر)</div>
       <div class="value" id="tickerValue">٠.٠٠ ريال</div>
     </div>
   </div>
   <div class="wrap">
     <nav class="tabs">
-      <button data-tab="employees" class="active">الموظفون</button>
-      <button data-tab="transactions">الحركات المالية</button>
-      <button data-tab="statement">الكشف الشهري</button>
-      <button data-tab="reports">التقارير والتصدير</button>
-            <button data-tab="summary" onclick="goToSummaryPage()"> الجرد اليومي     </button>
-
-<script>
-function goToSummaryPage() {
-    window.location.href = 'index.html'; // استبدل بالرابط الفعلي لصفحتك
-}
-</script>
-
+      <button data-tab="report" class="active">التقرير اليومي</button>
+      <button data-tab="items">جرد الأصناف</button>
+      <button data-tab="attach">المرفقات والصور</button>
+      <button data-tab="summary">الملخص والتصدير</button>
+      <button class="link-out" onclick="window.location.href='payroll-app.html'">نظام إدارة الحسابات والحركات المالية</button>
     </nav>
   </div>
 </header>
@@ -153,145 +214,175 @@ function goToSummaryPage() {
 
 <main class="wrap">
 
-  <!-- ===================== الموظفون ===================== -->
-  <section class="panel active" id="panel-employees">
+  <!-- ===================== التقرير اليومي ===================== -->
+  <section class="panel active" id="panel-report">
     <div class="card">
-      <h2><span class="n">١</span> قائمة الموظفين</h2>
-      <p class="hint">عند اختيار نوع الدوام "فترتين" تظهر فترة ثانية (من/إلى). سعر الساعة الإضافي يُقترح تلقائيًا من الراتب وساعات العمل، ويمكنك تعديله يدويًا في أي وقت (اضغط ↺ للعودة للاقتراح التلقائي).</p>
-      <div style="overflow-x:auto;">
-        <table id="empTable">
-          <thead><tr>
-            <th>الاسم</th><th>الوظيفة</th><th>الراتب الأساسي</th><th>نوع الدوام</th>
-            <th>من (١)</th><th>إلى (١)</th><th>من (٢)</th><th>إلى (٢)</th>
-            <th>ساعات العمل اليومية</th><th>سعر الساعة الإضافي</th><th></th>
-          </tr></thead>
-          <tbody id="empBody"></tbody>
-        </table>
-      </div>
-      <div class="actions" style="margin-top:12px;"><button class="btn btn-outline" id="btnAddEmp">+ إضافة موظف</button></div>
-    </div>
-  </section>
-
-  <!-- ===================== الحركات المالية ===================== -->
-  <section class="panel" id="panel-transactions">
-    <div class="card">
-      <h2><span class="n">١</span> إضافة حركة مالية</h2>
-      <p class="hint">خصم، مسحوبات (سلفة)، تحفيز، أو ساعات إضافي — لكل حركة تاريخ ومبلغ وسبب.</p>
+      <h2><span class="n">١</span> بيانات الوردية</h2>
+      <p class="hint">العهدة السابقة والعهدة الجديدة للتوثيق فقط — لا تدخلان ضمن أي معادلة حسابية.</p>
       <div class="grid">
-        <div class="field"><label>الموظف</label><select id="tx_emp"></select></div>
-        <div class="field"><label>التاريخ</label><input type="date" id="tx_date"></div>
-        <div class="field"><label>النوع</label>
-          <select id="tx_type">
-            <option value="deduction">خصم</option>
-            <option value="withdrawal">مسحوبات (سلفة)</option>
-            <option value="incentive">تحفيز</option>
-            <option value="overtime">ساعات إضافي</option>
-          </select>
+        <div class="field"><label>التاريخ</label><input type="date" id="f_date"></div>
+        <div class="field"><label>اسم الكاشير</label><input type="text" id="f_cashier" placeholder="مثال: منصور أنيس"></div>
+        <div class="field"><label>العهدة السابقة (توثيق فقط)</label><input type="number" id="f_prevFloat" step="0.01"></div>
+        <div class="field"><label>العهدة الجديدة (توثيق فقط)</label><input type="number" id="f_newFloat" step="0.01"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">٢</span> الكاش والشبكة</h2>
+      <p class="hint">أدخل المبلغ المتوفر فعليًا في الصندوق بعد العد — يضيف النظام تلقائيًا المشتريات المدفوعة من الصندوق ليحسب إجمالي المبيعات كاش الحقيقي.</p>
+      <div class="grid">
+        <div class="field"><label>المبلغ المتوفر في الصندوق</label><input type="number" id="f_cashAvailable" step="0.01"></div>
+        <div class="field"><label>مبيعات الشبكة</label><input type="number" id="f_network" step="0.01"></div>
+        <div class="field wide"><label>إجمالي مبيعات الكاش (المتوفر + المشتريات) — تلقائي</label><input type="text" id="f_cashSalesTotal" readonly></div>
+        <div class="field wide"><label>إجمالي الكاش + الشبكة — تلقائي</label><input type="text" id="f_cashNetworkTotal" readonly></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">٣</span> كيتا وهنجر</h2>
+      <p class="hint">إجمالي المبلغ لكل تطبيق، مع عدد القطع المباعة من كل قسم رئيسي (للمطابقة مع الجرد).</p>
+      <div class="two-col">
+        <div class="subgroup">
+          <h3>كيتا</h3>
+          <div class="grid">
+            <div class="field wide"><label>إجمالي مبيعات كيتا (ريال)</label><input type="number" id="f_keetaTotal" step="0.01"></div>
+            <div class="field"><label>عدد الدجاج</label><input type="number" id="f_keetaChicken" step="1"></div>
+            <div class="field"><label>عدد المشروبات</label><input type="number" id="f_keetaDrinks" step="1"></div>
+            <div class="field"><label>عدد السلطات</label><input type="number" id="f_keetaSalads" step="1"></div>
+            <div class="field"><label>عدد الماء</label><input type="number" id="f_keetaWater" step="1"></div>
+          </div>
         </div>
-        <div class="field" id="tx_hours_field" style="display:none;"><label>عدد الساعات الإضافية</label><input type="number" id="tx_hours" step="0.25"></div>
-        <div class="field" id="tx_rate_field" style="display:none;"><label>سعر الساعة الإضافي</label><input type="number" id="tx_rate" step="0.01"></div>
-        <div class="field"><label>المبلغ (يُحسب تلقائيًا للإضافي، أو أدخله يدويًا)</label><input type="number" id="tx_amount" step="0.01"></div>
-        <div class="field wide"><label>السبب</label><input type="text" id="tx_reason" placeholder="مثال: تأخير عن الدوام، سلفة شخصية، تميز في الأداء، تغطية وردية إضافية..."></div>
+        <div class="subgroup">
+          <h3>هنجر</h3>
+          <div class="grid">
+            <div class="field wide"><label>إجمالي مبيعات هنجر (ريال)</label><input type="number" id="f_hungerTotal" step="0.01"></div>
+            <div class="field"><label>عدد الدجاج</label><input type="number" id="f_hungerChicken" step="1"></div>
+            <div class="field"><label>عدد المشروبات</label><input type="number" id="f_hungerDrinks" step="1"></div>
+            <div class="field"><label>عدد السلطات</label><input type="number" id="f_hungerSalads" step="1"></div>
+            <div class="field"><label>عدد الماء</label><input type="number" id="f_hungerWater" step="1"></div>
+          </div>
+        </div>
       </div>
-      <div class="actions" style="margin-top:12px;"><button class="btn btn-primary" id="btnAddTx">+ إضافة الحركة</button></div>
     </div>
 
     <div class="card">
-      <h2><span class="n">٢</span> سجل الحركات</h2>
-      <div style="overflow-x:auto;">
-        <table id="txTable">
-          <thead><tr><th>التاريخ</th><th>الموظف</th><th>النوع</th><th>التفاصيل</th><th>المبلغ</th><th>السبب</th><th></th></tr></thead>
-          <tbody id="txBody"></tbody>
-        </table>
+      <h2><span class="n">٤</span> المشتريات الجديدة (خرج الصندوق)</h2>
+      <p class="hint">أضف كل مشترى باسمه وسعره — الإجمالي يُخصم من الصندوق ويُضاف تلقائيًا لحساب إجمالي مبيعات الكاش أعلاه.</p>
+      <div id="purchasesList"></div>
+      <div class="actions" style="margin-top:6px;">
+        <button type="button" class="btn btn-outline" id="btnAddPurchase">+ إضافة مشترى</button>
       </div>
+      <div style="margin-top:12px; font-family:'Cairo',sans-serif; font-weight:700;">إجمالي المشتريات (مسحوبات من الصندوق): <span id="purchasesTotal">٠.٠٠</span> ريال</div>
     </div>
-  </section>
 
-  <!-- ===================== الكشف الشهري ===================== -->
-  <section class="panel" id="panel-statement">
     <div class="card">
-      <h2><span class="n">١</span> فترة الكشف</h2>
-      <p class="hint">حدد بداية ونهاية فترة الراتب (لا يلزم أن تكون شهرًا تقويميًا كاملاً — مفيد لدورات الرواتب المخصصة).</p>
+      <h2><span class="n">٥</span> بيع آجل، مصروفات، وملاحظات</h2>
+      <p class="hint">بيع الآجل للتوثيق فقط ولا يدخل ضمن معادلة التسوية بين الكاش/الشبكة وجرد الأقسام.</p>
       <div class="grid">
-        <div class="field"><label>بداية الفترة</label><input type="date" id="stmt_start"></div>
-        <div class="field"><label>نهاية الفترة</label><input type="date" id="stmt_end"></div>
+        <div class="field"><label>بيع آجل (توثيق فقط)</label><input type="number" id="f_credit" step="0.01"></div>
+        <div class="field"><label>الاستلامات الخارجية</label><input type="number" id="f_external" step="0.01"></div>
+        <div class="field"><label>المصروفات</label><input type="number" id="f_expenses" step="0.01"></div>
+        <div class="field wide"><label>ملاحظات عامة</label><textarea id="f_notes" rows="3" placeholder="أي ملاحظة عن الوردية..."></textarea></div>
       </div>
     </div>
+  </section>
 
+  <!-- ===================== جرد الأصناف ===================== -->
+  <section class="panel" id="panel-items">
     <div class="card">
-      <h2><span class="n">٢</span> كشف الرواتب (تلقائي)</h2>
-      <p class="hint">الصافي = الراتب الأساسي + التحفيز + الإضافي − الخصومات − المسحوبات.</p>
+      <h2><span class="n">١</span> تفاصيل الجرد حسب الصنف</h2>
+      <p class="hint">حدّد سعر كل صنف، ثم أدخل بداية / مشتريات / المتبقي / التوالف — يُحسب تلقائيًا: المبيعات (كمية) = بداية + مشتريات − متبقي − توالف، وقيمة المبيعات = الكمية × السعر، وخسارة التوالف = التوالف × السعر.</p>
       <div style="overflow-x:auto;">
-        <table id="stmtTable">
-          <thead><tr><th>الموظف</th><th>الراتب الأساسي</th><th>تحفيز</th><th>إضافي</th><th>خصومات</th><th>مسحوبات</th><th>الصافي</th></tr></thead>
-          <tbody id="stmtBody"></tbody>
-          <tfoot><tr id="stmtTotalRow"></tr></tfoot>
+        <table id="itemsTable">
+          <thead>
+            <tr><th>الصنف</th><th>السعر</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>المبيعات (كمية)</th><th>قيمة المبيعات</th><th>خسارة التوالف</th></tr>
+          </thead>
+          <tbody id="itemsBody"></tbody>
         </table>
       </div>
-      <div class="breakdown" id="stmtBreakdown"></div>
-      <div class="actions" style="margin-top:14px;"><button class="btn btn-outline" id="btnSaveStatement">💾 حفظ هذا الكشف في الأرشيف</button></div>
     </div>
 
     <div class="card">
-      <h2><span class="n">٣</span> الكشوف المحفوظة</h2>
+      <h2><span class="n">٢</span> ملخص الجرد حسب القسم (تلقائي)</h2>
       <div style="overflow-x:auto;">
-        <table id="savedTable">
-          <thead><tr><th>الفترة</th><th>تاريخ الحفظ</th><th>إجمالي الصافي</th><th></th><th></th></tr></thead>
-          <tbody id="savedBody"></tbody>
+        <table id="deptTable">
+          <thead><tr><th>القسم</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>المبيعات (إجمالي كمية)</th><th>كيتا+هنجر (كمية)</th><th>صافي المبيعات (كمية)</th><th>صافي قيمة المبيعات</th><th>خسارة التوالف</th></tr></thead>
+          <tbody id="deptBody"></tbody>
+          <tfoot><tr id="deptTotalRow"></tr></tfoot>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- ===================== التقارير والتصدير ===================== -->
-  <section class="panel" id="panel-reports">
+  <!-- ===================== المرفقات ===================== -->
+  <section class="panel" id="panel-attach">
     <div class="card">
-      <h2><span class="n">١</span> نوع التقرير</h2>
-      <div class="seg" id="reportTypeSeg">
-        <button data-type="daily" class="active">يومي</button>
-        <button data-type="monthly">فترة/شهري</button>
-      </div>
-      <div class="grid" style="margin-top:14px;">
-        <div class="field" id="reportDailyField"><label>التاريخ</label><input type="date" id="rep_date"></div>
-        <div class="field" id="reportStartField" style="display:none;"><label>بداية الفترة</label><input type="date" id="rep_start"></div>
-        <div class="field" id="reportEndField" style="display:none;"><label>نهاية الفترة</label><input type="date" id="rep_end"></div>
+      <h2><span class="n">١</span> صور الفواتير والمرفقات حسب القسم</h2>
+      <p class="hint">صوّر الفاتورة مباشرة من الجوال أو ارفعها من المعرض. تُضمَّن كل الصور داخل ملف PDF عند التصدير.</p>
+      <div class="att-grid">
+        <div class="att-cat">
+          <h3>مشتريات اليوم</h3>
+          <div class="desc">فواتير المشتريات الجديدة (خبز، خضار، لحوم...)</div>
+          <label class="upload-btn">+ إضافة صورة<input type="file" accept="image/*" capture="environment" multiple hidden data-cat="purchases"></label>
+          <div class="thumbs" id="thumbs-purchases"></div>
+        </div>
+        <div class="att-cat">
+          <h3>استلامات خارجية</h3>
+          <div class="desc">إيصالات الاستلامات من خارج المطعم</div>
+          <label class="upload-btn">+ إضافة صورة<input type="file" accept="image/*" capture="environment" multiple hidden data-cat="external"></label>
+          <div class="thumbs" id="thumbs-external"></div>
+        </div>
+        <div class="att-cat">
+          <h3>فواتير كيتا</h3>
+          <div class="desc">فواتير طلبات كيتا مع رقم الطلب</div>
+          <label class="upload-btn">+ إضافة صورة<input type="file" accept="image/*" capture="environment" multiple hidden data-cat="keeta"></label>
+          <div class="thumbs" id="thumbs-keeta"></div>
+        </div>
+        <div class="att-cat">
+          <h3>صور هنجر</h3>
+          <div class="desc">فواتير وطلبات تطبيق هنجر</div>
+          <label class="upload-btn">+ إضافة صورة<input type="file" accept="image/*" capture="environment" multiple hidden data-cat="hunger"></label>
+          <div class="thumbs" id="thumbs-hunger"></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="kpis" id="reportKpis"></div>
+  <!-- ===================== الملخص والتصدير ===================== -->
+  <section class="panel" id="panel-summary">
+    <div class="kpis" id="kpis"></div>
 
     <div class="card">
-      <h2><span class="n">٢</span> معاينة التقرير</h2>
+      <h2><span class="n">١</span> ملخص الأقسام</h2>
       <div style="overflow-x:auto;">
-        <table id="reportTable">
-          <thead id="reportThead"></thead>
-          <tbody id="reportBody"></tbody>
+        <table id="deptTableSummary">
+          <thead><tr><th>القسم</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>المبيعات (إجمالي كمية)</th><th>كيتا+هنجر (كمية)</th><th>صافي المبيعات (كمية)</th><th>صافي قيمة المبيعات</th><th>خسارة التوالف</th></tr></thead>
+          <tbody id="deptBodySummary"></tbody>
         </table>
       </div>
     </div>
 
     <div class="card">
-      <h2><span class="n">٣</span> تصدير ونسخ احتياطية</h2>
+      <h2><span class="n">٢</span> تصدير التقرير</h2>
+      <p class="hint">Excel وPDF يشملان كل البيانات: الكاش والشبكة، كيتا وهنجر، المشتريات، جرد الأصناف بالأسعار، والتسوية النهائية.</p>
       <div class="actions">
         <button class="btn btn-primary" id="btnExcel">⬇ تصدير Excel</button>
         <button class="btn btn-primary" id="btnPdf">⬇ تصدير PDF</button>
-        <button class="btn btn-outline" id="btnSaveJson">⬇ تصدير JSON (نسخة كاملة)</button>
-        <label class="btn btn-outline">↑ استيراد نسخة JSON<input type="file" accept="application/json" hidden id="importJson"></label>
-        <label class="btn btn-outline">↑ استيراد من ملف Excel<input type="file" accept=".xlsx,.xls" hidden id="importExcel"></label>
-        <button class="btn btn-outline" id="btnReset">تفريغ الكل</button>
+        <button class="btn btn-outline" id="btnSaveJson">⬇ تصدير JSON (نسخة كاملة بالصور)</button>
       </div>
-    </div>
-
-    <div class="card">
-      <h2><span class="n">٤</span> تذكرني على هذا الجهاز</h2>
-      <p class="hint">عند التفعيل، تُحفظ كل بيانات الموظفين والحركات والكشوف تلقائيًا في متصفح هذا الجهاز، فتبقى موجودة حتى لو أغلقت الموقع وعدت لاحقًا — بدون الحاجة لاستيراد أي ملف. هذا الحفظ محلي في هذا الجهاز/المتصفح فقط.</p>
-      <label style="display:flex; align-items:center; gap:8px; font-family:'Cairo',sans-serif; font-weight:700; cursor:pointer;">
-        <input type="checkbox" id="rememberMe" style="width:18px; height:18px;">
-        تذكرني (حفظ تلقائي في هذا الجهاز)
-      </label>
-      <div id="rememberStatus" style="font-size:12px; color:var(--ink-soft); margin-top:8px;"></div>
       <div class="actions" style="margin-top:10px;">
-        <button class="btn btn-outline" id="btnForget">نسيان البيانات المحفوظة على هذا الجهاز</button>
+        <label class="btn btn-outline">↑ استيراد نسخة JSON<input type="file" accept="application/json" hidden id="importJson"></label>
+        <label class="btn btn-outline">↑ استرداد من ملف Excel<input type="file" accept=".xlsx,.xls" hidden id="importExcel"></label>
+      </div>
+      <div class="actions" style="margin-top:10px;">
+        <button class="btn btn-primary" id="btnNextDay">تجهيز بيانات اليوم التالي</button>
+        <button class="btn btn-outline" id="btnReset">تفريغ اليوم</button>
+      </div>
+
+      <div class="save-toggle-wrap">
+        <input type="checkbox" id="chkRememberFields">
+        <label for="chkRememberFields">تذكر كل الحقول تلقائيًا (مثل "تذكرني")</label>
+        <span class="hint">— يحفظ البيانات في متصفحك حتى بعد الخروج</span>
       </div>
     </div>
   </section>
@@ -315,453 +406,434 @@ function goToSummaryPage() {
 </div>
 
 <script>
-const shiftTypes = ['دوام كامل','فترة صباحية','فترة مسائية','فترتين','حسب الطلب'];
-const txTypeLabel = {deduction:'خصم', withdrawal:'مسحوبات', incentive:'تحفيز', overtime:'إضافي'};
+/* ============ item catalog: price, دep, name — price is editable per day, defaults 0 except salads ============ */
+const itemsData = [
+  {id:'d_small', dept:'المشروبات', name:'مشروبات صغير', defPrice:0},
+  {id:'d_1l',    dept:'المشروبات', name:'مشروبات 1 لتر', defPrice:0},
+  {id:'d_2l',    dept:'المشروبات', name:'مشروبات 2 لتر', defPrice:0},
+  {id:'s_p2',    dept:'السلطات', name:'سلطات سعر 2 ريال', defPrice:2},
+  {id:'s_p3',    dept:'السلطات', name:'سلطات سعر 3 ريال', defPrice:3},
+  {id:'c_grill', dept:'الدجاج', name:'دجاج شواية', defPrice:0},
+  {id:'c_madh',  dept:'الدجاج', name:'دجاج مضغوط', defPrice:0},
+  {id:'m_hashi', dept:'اللحوم', name:'لحم حاشي', defPrice:0},
+  {id:'m_hari',  dept:'اللحوم', name:'لحم حري', defPrice:0},
+  {id:'w_small', dept:'الماء', name:'ماء صغير', defPrice:0},
+  {id:'w_big',   dept:'الماء', name:'ماء كبير', defPrice:0},
+  {id:'i_ch_b',  dept:'الإيدامات', name:'إيدام دجاج كبير', defPrice:0},
+  {id:'i_ch_s',  dept:'الإيدامات', name:'إيدام دجاج صغير', defPrice:0},
+  {id:'i_ml_b',  dept:'الإيدامات', name:'إيدام ملوخية كبير', defPrice:0},
+  {id:'i_ml_s',  dept:'الإيدامات', name:'إيدام ملوخية صغير', defPrice:0},
+  {id:'i_vg_b',  dept:'الإيدامات', name:'إيدام خضار كبير', defPrice:0},
+  {id:'i_vg_s',  dept:'الإيدامات', name:'إيدام خضار صغير', defPrice:0},
+];
+const depts = ['المشروبات','السلطات','الدجاج','اللحوم','الماء','الإيدامات'];
+const attCats = [
+  {key:'purchases', label:'مشتريات اليوم'},
+  {key:'external', label:'استلامات خارجية'},
+  {key:'keeta', label:'فواتير كيتا'},
+  {key:'hunger', label:'صور هنجر'},
+];
 
-const state = { employees: [], transactions: [], savedReports: [] };
+const state = {
+  header:{},
+  items:{},
+  attachments:{purchases:[], external:[], keeta:[], hunger:[]}
+};
+itemsData.forEach(it => state.items[it.id] = {price:it.defPrice, beg:0, purch:0, remain:0, damaged:0});
+state.header.purchasesList = [];
+
+const headerFieldIds = {
+  date:'f_date', cashier:'f_cashier', prevFloat:'f_prevFloat', newFloat:'f_newFloat',
+  cashAvailable:'f_cashAvailable', network:'f_network',
+  keetaTotal:'f_keetaTotal', keetaChicken:'f_keetaChicken', keetaDrinks:'f_keetaDrinks', keetaSalads:'f_keetaSalads', keetaWater:'f_keetaWater',
+  hungerTotal:'f_hungerTotal', hungerChicken:'f_hungerChicken', hungerDrinks:'f_hungerDrinks', hungerSalads:'f_hungerSalads', hungerWater:'f_hungerWater',
+  credit:'f_credit', external:'f_external', expenses:'f_expenses', notes:'f_notes'
+};
 
 function num(v){ const n = parseFloat(v); return isNaN(n) ? 0 : n; }
 function fmt(n){ return n.toLocaleString('ar-SA', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-function uid(){ return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-function todayStr(){ return new Date().toISOString().slice(0,10); }
-function monthRange(){
-  const d = new Date();
-  const start = new Date(d.getFullYear(), d.getMonth(), 1);
-  const end = new Date(d.getFullYear(), d.getMonth()+1, 0);
-  return {start:start.toISOString().slice(0,10), end:end.toISOString().slice(0,10)};
+
+/* ---------- auto-save to localStorage (تذكرني) ---------- */
+const LS_KEY = 'inventoryAppState_v2';
+function saveToLocalStorage(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){ /* ignore quota */ }
 }
-function computeSuggestedRate(emp){
-  const hours = num(emp.dailyHours);
-  if(hours<=0) return 0;
-  const hourly = num(emp.baseSalary) / (30*hours);
-  return Math.round(hourly*1.5*100)/100;
+function loadFromLocalStorage(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    Object.assign(state, data);
+    return true;
+  } catch(e){ return false; }
+}
+function maybeAutosave(){ if(document.getElementById('chkRememberFields').checked) saveToLocalStorage(); }
+
+/* apply state to UI (also used after JSON/Excel import & restore) */
+function applyStateToUI(){
+  state.header.purchasesList = state.header.purchasesList || [];
+  Object.entries(headerFieldIds).forEach(([key,id])=>{
+    document.getElementById(id).value = state.header[key] ?? '';
+  });
+  itemsData.forEach(it=>{
+    const v = state.items[it.id] || {price:it.defPrice, beg:0,purch:0,remain:0,damaged:0};
+    state.items[it.id]=v;
+    document.querySelectorAll(`input[data-id="${it.id}"]`).forEach(inp=>{ inp.value = v[inp.dataset.f]||0; });
+    renderItemCalc(it.id);
+  });
+  attCats.forEach(cat=> renderThumbs(cat.key));
+  renderPurchases();
+  recalcHeader();
+  renderDeptSummary();
 }
 
 /* ---------- tabs ---------- */
-document.querySelectorAll('nav.tabs button').forEach(btn=>{
+document.querySelectorAll('nav.tabs button[data-tab]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('nav.tabs button[data-tab]').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('section.panel').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
-    if(btn.dataset.tab==='statement') renderStatement();
-    if(btn.dataset.tab==='reports') renderReport();
-    if(btn.dataset.tab==='transactions') refreshEmpSelect();
+    if(btn.dataset.tab==='summary') renderSummary();
   });
 });
 
-/* ---------- employees table ---------- */
-function renderEmployees(){
-  const body = document.getElementById('empBody');
-  body.innerHTML='';
-  state.employees.forEach(emp=>{
-    const isTwo = emp.shiftType==='فترتين';
-    const tr = document.createElement('tr');
-    tr.dataset.id = emp.id;
-    tr.innerHTML = `
-      <td><input type="text" value="${emp.name||''}" data-f="name" placeholder="اسم الموظف"></td>
-      <td><input type="text" value="${emp.position||''}" data-f="position" placeholder="الوظيفة"></td>
-      <td><input type="number" step="0.01" value="${emp.baseSalary||0}" data-f="baseSalary"></td>
-      <td><select data-f="shiftType">${shiftTypes.map(s=>`<option ${s===emp.shiftType?'selected':''}>${s}</option>`).join('')}</select></td>
-      <td><input type="time" value="${emp.shiftStart||''}" data-f="shiftStart"></td>
-      <td><input type="time" value="${emp.shiftEnd||''}" data-f="shiftEnd"></td>
-      <td><input type="time" value="${emp.shift2Start||''}" data-f="shift2Start" ${isTwo?'':'disabled'}></td>
-      <td><input type="time" value="${emp.shift2End||''}" data-f="shift2End" ${isTwo?'':'disabled'}></td>
-      <td><input type="number" step="0.5" value="${emp.dailyHours||0}" data-f="dailyHours"></td>
-      <td><div class="cell-flex"><input type="number" step="0.01" value="${emp.overtimeRate||0}" data-f="overtimeRate"><button type="button" class="mini-btn" data-action="resetRate" title="إعادة الاقتراح التلقائي">↺</button></div></td>
-      <td><button class="del-btn" data-action="delete" title="حذف الموظف">×</button></td>
+document.getElementById('f_date').value = new Date().toISOString().slice(0,10);
+
+/* ---------- header inputs ---------- */
+Object.entries(headerFieldIds).forEach(([key, id])=>{
+  const el = document.getElementById(id);
+  el.addEventListener('input', ()=>{
+    state.header[key] = el.value;
+    recalcHeader();
+    maybeAutosave();
+  });
+});
+
+function purchasesTotal(){
+  return (state.header.purchasesList||[]).reduce((a,p)=>a+num(p.price),0);
+}
+function recalcHeader(){
+  const h = state.header;
+  const pTotal = purchasesTotal();
+  document.getElementById('purchasesTotal').textContent = fmt(pTotal);
+
+  const cashSalesTotal = num(h.cashAvailable) + pTotal;
+  document.getElementById('f_cashSalesTotal').value = fmt(cashSalesTotal)+' ريال';
+
+  const cashNetworkTotal = cashSalesTotal + num(h.network);
+  document.getElementById('f_cashNetworkTotal').value = fmt(cashNetworkTotal)+' ريال';
+
+  const deptRevenue = state._deptTotals ? state._deptTotals.netRevenue : 0;
+  const variance = cashNetworkTotal - deptRevenue;
+  const variancePct = deptRevenue !== 0 ? (variance/deptRevenue*100) : (cashNetworkTotal!==0 ? 100 : 0);
+
+  const ticker = document.getElementById('tickerValue');
+  ticker.textContent = fmt(variance)+' ريال ('+(variance>=0?'+':'')+variancePct.toFixed(1)+'٪)';
+  ticker.className='value';
+  ticker.classList.add(Math.abs(variancePct)<=3 ? 'good':'bad');
+
+  state._purchasesTotal = pTotal;
+  state._cashSalesTotal = cashSalesTotal;
+  state._cashNetworkTotal = cashNetworkTotal;
+  state._variance = variance;
+  state._variancePct = variancePct;
+}
+
+/* ---------- purchases (itemized) ---------- */
+function renderPurchases(){
+  const wrap = document.getElementById('purchasesList');
+  wrap.innerHTML='';
+  (state.header.purchasesList||[]).forEach((p, idx)=>{
+    const row = document.createElement('div'); row.className='purchase-row';
+    row.innerHTML = `
+      <input class="p-name" type="text" placeholder="اسم الصنف" value="${p.name||''}" data-idx="${idx}" data-f="name">
+      <input class="p-price" type="number" step="0.01" placeholder="السعر" value="${p.price||''}" data-idx="${idx}" data-f="price">
+      <input class="p-note" type="text" placeholder="ملاحظة" value="${p.note||''}" data-idx="${idx}" data-f="note">
+      <button type="button" title="حذف" data-idx="${idx}">×</button>
     `;
-    body.appendChild(tr);
+    wrap.appendChild(row);
   });
+  wrap.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const idx = inp.dataset.idx, f = inp.dataset.f;
+      state.header.purchasesList[idx][f] = inp.value;
+      recalcHeader();
+      maybeAutosave();
+    });
+  });
+  wrap.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      state.header.purchasesList.splice(b.dataset.idx,1);
+      renderPurchases();
+      recalcHeader();
+      maybeAutosave();
+    });
+  });
+}
+document.getElementById('btnAddPurchase').addEventListener('click', ()=>{
+  state.header.purchasesList = state.header.purchasesList || [];
+  state.header.purchasesList.push({name:'', price:0, note:''});
+  renderPurchases();
+  maybeAutosave();
+});
 
-  body.querySelectorAll('tr').forEach(tr=>{
-    const id = tr.dataset.id;
-    const emp = state.employees.find(e=>e.id===id);
+/* ---------- items table ---------- */
+const itemsBody = document.getElementById('itemsBody');
+let lastDept = null;
+itemsData.forEach(it=>{
+  if(it.dept!==lastDept){
+    const dr = document.createElement('tr'); dr.className='dept-row';
+    dr.innerHTML = `<td colspan="9">${it.dept}</td>`;
+    itemsBody.appendChild(dr);
+    lastDept = it.dept;
+  }
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${it.name}</td>
+    <td><input type="number" step="0.01" class="price-input" data-id="${it.id}" data-f="price"></td>
+    <td><input type="number" step="0.1" data-id="${it.id}" data-f="beg"></td>
+    <td><input type="number" step="0.1" data-id="${it.id}" data-f="purch"></td>
+    <td><input type="number" step="0.1" data-id="${it.id}" data-f="remain"></td>
+    <td><input type="number" step="0.1" data-id="${it.id}" data-f="damaged"></td>
+    <td class="calc" id="qty_${it.id}">٠.٠</td>
+    <td class="calc money" id="rev_${it.id}">٠.٠٠</td>
+    <td class="calc money" id="loss_${it.id}">٠.٠٠</td>
+  `;
+  itemsBody.appendChild(tr);
+});
+itemsBody.querySelectorAll('input').forEach(inp=>{
+  inp.addEventListener('input', ()=>{
+    const id = inp.dataset.id, f = inp.dataset.f;
+    state.items[id][f] = num(inp.value);
+    renderItemCalc(id);
+    renderDeptSummary();
+    maybeAutosave();
+  });
+});
+function itemSalesQty(v){ return num(v.beg)+num(v.purch)-num(v.remain)-num(v.damaged); }
+function itemRevenue(v){ return itemSalesQty(v)*num(v.price); }
+function itemLoss(v){ return num(v.damaged)*num(v.price); }
+function renderItemCalc(id){
+  const v = state.items[id];
+  const qty = itemSalesQty(v);
+  const qtyCell = document.getElementById('qty_'+id);
+  qtyCell.textContent = qty.toFixed(1);
+  qtyCell.classList.toggle('neg', qty<0);
+  document.getElementById('rev_'+id).textContent = fmt(itemRevenue(v));
+  document.getElementById('loss_'+id).textContent = fmt(itemLoss(v));
+  const priceInput = itemsBody.querySelector(`input[data-id="${id}"][data-f="price"]`);
+  if(priceInput) priceInput.classList.toggle('price-missing', num(v.price)===0);
+}
 
-    tr.querySelectorAll('input, select').forEach(inp=>{
-      inp.addEventListener('input', ()=>{
-        const f = inp.dataset.f;
-        if(!f) return;
-        if(f==='baseSalary' || f==='dailyHours' || f==='overtimeRate'){
-          emp[f] = num(inp.value);
-          if(f==='overtimeRate'){ emp.overtimeManual = true; }
-          else if(!emp.overtimeManual){
-            const suggested = computeSuggestedRate(emp);
-            emp.overtimeRate = suggested;
-            const rateInput = tr.querySelector('[data-f="overtimeRate"]');
-            if(rateInput) rateInput.value = suggested;
-          }
-        } else {
-          emp[f] = inp.value;
+/* ---------- department summary ---------- */
+/* كيتا وهنجر تُدخل كإجمالي لكل تصنيف (دجاج/مشروبات/سلطات/ماء) وليست مرتبطة بصنف محدد،
+   لذلك نطرحها على مستوى القسم فقط، وليس على مستوى الصنف الفردي */
+function deptAppQty(dept){
+  const h = state.header;
+  if(dept==='الدجاج')     return num(h.keetaChicken) + num(h.hungerChicken);
+  if(dept==='المشروبات')  return num(h.keetaDrinks)   + num(h.hungerDrinks);
+  if(dept==='السلطات')    return num(h.keetaSalads)   + num(h.hungerSalads);
+  if(dept==='الماء')      return num(h.keetaWater)    + num(h.hungerWater);
+  return 0; /* اللحوم والإيدامات: لا يوجد لهما تصنيف مقابل في كيتا/هنجر */
+}
+function computeDeptSummary(){
+  return depts.map(dept=>{
+    const rows = itemsData.filter(it=>it.dept===dept).map(it=>state.items[it.id]);
+    const sum = (f)=> rows.reduce((a,v)=>a+num(v[f]),0);
+    const qty = rows.reduce((a,v)=>a+itemSalesQty(v),0);
+    const revenue = rows.reduce((a,v)=>a+itemRevenue(v),0);
+    const appQty = deptAppQty(dept);
+    const netQty = qty - appQty;
+    const avgPrice = qty !== 0 ? revenue/qty : 0;
+    const netRevenue = revenue - (appQty*avgPrice);
+    return {
+      dept,
+      beg:sum('beg'), purch:sum('purch'), remain:sum('remain'), damaged:sum('damaged'),
+      qty, appQty, netQty, revenue, netRevenue,
+      loss: rows.reduce((a,v)=>a+itemLoss(v),0)
+    };
+  });
+}
+function renderDeptSummary(){
+  const data = computeDeptSummary();
+  const rowsHtml = data.map(d=>`<tr><td>${d.dept}</td><td>${d.beg.toFixed(1)}</td><td>${d.purch.toFixed(1)}</td><td>${d.remain.toFixed(1)}</td><td>${d.damaged.toFixed(1)}</td><td>${d.qty.toFixed(1)}</td><td>${d.appQty.toFixed(1)}</td><td class="calc${d.netQty<0?' neg':''}">${d.netQty.toFixed(1)}</td><td class="calc money${d.netRevenue<0?' neg':''}">${fmt(d.netRevenue)}</td><td>${fmt(d.loss)}</td></tr>`).join('');
+  document.getElementById('deptBody').innerHTML = rowsHtml;
+  document.getElementById('deptBodySummary').innerHTML = rowsHtml;
+  const totals = data.reduce((a,d)=>({beg:a.beg+d.beg,purch:a.purch+d.purch,remain:a.remain+d.remain,damaged:a.damaged+d.damaged,qty:a.qty+d.qty,appQty:a.appQty+d.appQty,netQty:a.netQty+d.netQty,revenue:a.revenue+d.revenue,netRevenue:a.netRevenue+d.netRevenue,loss:a.loss+d.loss}),{beg:0,purch:0,remain:0,damaged:0,qty:0,appQty:0,netQty:0,revenue:0,netRevenue:0,loss:0});
+  document.getElementById('deptTotalRow').innerHTML = `<td>الإجمالي</td><td>${totals.beg.toFixed(1)}</td><td>${totals.purch.toFixed(1)}</td><td>${totals.remain.toFixed(1)}</td><td>${totals.damaged.toFixed(1)}</td><td>${totals.qty.toFixed(1)}</td><td>${totals.appQty.toFixed(1)}</td><td>${totals.netQty.toFixed(1)}</td><td>${fmt(totals.netRevenue)}</td><td>${fmt(totals.loss)}</td>`;
+  state._deptSummary = data;
+  state._deptTotals = totals;
+  recalcHeader();
+}
+
+/* ---------- attachments ---------- */
+function compressImage(file, maxDim=1400, quality=0.75){
+  return new Promise((resolve)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.width, h = img.height;
+        if(w > maxDim || h > maxDim){
+          if(w >= h){ h = Math.round(h * maxDim / w); w = maxDim; }
+          else { w = Math.round(w * maxDim / h); h = maxDim; }
         }
-        recalcTicker();
-      });
-    });
-
-    const shiftSel = tr.querySelector('[data-f="shiftType"]');
-    shiftSel.addEventListener('change', ()=>{
-      emp.shiftType = shiftSel.value;
-      const isTwo = emp.shiftType==='فترتين';
-      tr.querySelector('[data-f="shift2Start"]').disabled = !isTwo;
-      tr.querySelector('[data-f="shift2End"]').disabled = !isTwo;
-    });
-
-    tr.querySelector('[data-action="resetRate"]').addEventListener('click', ()=>{
-      emp.overtimeManual = false;
-      const suggested = computeSuggestedRate(emp);
-      emp.overtimeRate = suggested;
-      tr.querySelector('[data-f="overtimeRate"]').value = suggested;
-    });
-
-    tr.querySelector('[data-action="delete"]').addEventListener('click', ()=>{
-      if(!confirm('سيتم حذف الموظف وكل حركاته المالية. متابعة؟')) return;
-      state.employees = state.employees.filter(e=>e.id!==id);
-      state.transactions = state.transactions.filter(t=>t.employeeId!==id);
-      renderEmployees(); refreshEmpSelect(); recalcTicker();
-    });
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = ()=> resolve(reader.result);
+      img.src = reader.result;
+    };
+    reader.onerror = ()=> resolve(null);
+    reader.readAsDataURL(file);
   });
-
-  refreshEmpSelect();
 }
-document.getElementById('btnAddEmp').addEventListener('click', ()=>{
-  state.employees.push({id:uid(), name:'', position:'', baseSalary:0, shiftType:shiftTypes[0], shiftStart:'', shiftEnd:'', shift2Start:'', shift2End:'', dailyHours:8, overtimeRate:0, overtimeManual:false});
-  renderEmployees();
+attCats.forEach(cat=>{
+  const input = document.querySelector(`input[data-cat="${cat.key}"]`);
+  input.addEventListener('change', async (e)=>{
+    const files = Array.from(e.target.files);
+    for(const file of files){
+      const dataUrl = await compressImage(file);
+      if(dataUrl){
+        state.attachments[cat.key].push({name:file.name, dataUrl, note:''});
+        renderThumbs(cat.key);
+        maybeAutosave();
+      }
+    }
+    e.target.value='';
+  });
 });
-
-/* ---------- transactions ---------- */
-function refreshEmpSelect(){
-  const sel = document.getElementById('tx_emp');
-  const current = sel.value;
-  sel.innerHTML = state.employees.map(e=>`<option value="${e.id}">${e.name||'(بدون اسم)'}</option>`).join('');
-  if(current) sel.value = current;
-}
-document.getElementById('tx_date').value = todayStr();
-
-function toggleOvertimeFields(){
-  const isOT = document.getElementById('tx_type').value==='overtime';
-  document.getElementById('tx_hours_field').style.display = isOT ? '' : 'none';
-  document.getElementById('tx_rate_field').style.display = isOT ? '' : 'none';
-  if(isOT){
-    const emp = state.employees.find(e=>e.id===document.getElementById('tx_emp').value);
-    document.getElementById('tx_rate').value = emp ? (emp.overtimeRate||0) : 0;
-    recomputeOvertimeAmount();
-  }
-}
-function recomputeOvertimeAmount(){
-  if(document.getElementById('tx_type').value!=='overtime') return;
-  const hours = num(document.getElementById('tx_hours').value);
-  const rate = num(document.getElementById('tx_rate').value);
-  if(hours>0 && rate>0) document.getElementById('tx_amount').value = Math.round(hours*rate*100)/100;
-}
-document.getElementById('tx_type').addEventListener('change', toggleOvertimeFields);
-document.getElementById('tx_emp').addEventListener('change', toggleOvertimeFields);
-document.getElementById('tx_hours').addEventListener('input', recomputeOvertimeAmount);
-document.getElementById('tx_rate').addEventListener('input', recomputeOvertimeAmount);
-
-document.getElementById('btnAddTx').addEventListener('click', ()=>{
-  const empId = document.getElementById('tx_emp').value;
-  if(!empId){ alert('أضف موظفًا أولًا من تبويب الموظفين.'); return; }
-  const amount = num(document.getElementById('tx_amount').value);
-  if(amount<=0){ alert('أدخل مبلغًا أكبر من صفر.'); return; }
-  const type = document.getElementById('tx_type').value;
-  const tx = {
-    id:uid(), employeeId:empId, date:document.getElementById('tx_date').value || todayStr(),
-    type, amount, reason:document.getElementById('tx_reason').value || ''
-  };
-  if(type==='overtime'){
-    tx.hours = num(document.getElementById('tx_hours').value);
-    tx.rate = num(document.getElementById('tx_rate').value);
-  }
-  state.transactions.push(tx);
-  document.getElementById('tx_amount').value='';
-  document.getElementById('tx_hours').value='';
-  document.getElementById('tx_reason').value='';
-  renderTransactions(); recalcTicker();
-});
-function empName(id){ const e = state.employees.find(x=>x.id===id); return e ? (e.name||'(بدون اسم)') : 'موظف محذوف'; }
-function txDetails(t){
-  if(t.type==='overtime' && t.hours) return `${t.hours} ساعة × ${fmt(t.rate||0)} ريال`;
-  return '—';
-}
-function renderTransactions(){
-  const body = document.getElementById('txBody');
-  const sorted = [...state.transactions].sort((a,b)=> b.date.localeCompare(a.date));
-  body.innerHTML = sorted.map(t=>`
-    <tr>
-      <td>${t.date}</td>
-      <td>${empName(t.employeeId)}</td>
-      <td><span class="tag ${t.type}">${txTypeLabel[t.type]}</span></td>
-      <td>${txDetails(t)}</td>
-      <td>${fmt(t.amount)}</td>
-      <td>${(t.reason||'').replace(/</g,'&lt;')}</td>
-      <td><button class="del-btn" data-id="${t.id}" title="حذف">×</button></td>
-    </tr>`).join('');
-  body.querySelectorAll('.del-btn').forEach(b=>{
+function renderThumbs(catKey){
+  const wrap = document.getElementById('thumbs-'+catKey);
+  wrap.innerHTML='';
+  state.attachments[catKey].forEach((att, idx)=>{
+    const div = document.createElement('div'); div.className='thumb';
+    div.innerHTML = `
+      <button title="حذف" data-cat="${catKey}" data-idx="${idx}">×</button>
+      <img src="${att.dataUrl}" alt="${att.name}">
+      <input type="text" placeholder="ملاحظة" value="${att.note}" data-cat="${catKey}" data-idx="${idx}">
+    `;
+    wrap.appendChild(div);
+  });
+  wrap.querySelectorAll('button').forEach(b=>{
     b.addEventListener('click', ()=>{
-      state.transactions = state.transactions.filter(t=>t.id!==b.dataset.id);
-      renderTransactions(); recalcTicker();
+      state.attachments[b.dataset.cat].splice(b.dataset.idx,1);
+      renderThumbs(b.dataset.cat);
+      maybeAutosave();
+    });
+  });
+  wrap.querySelectorAll('input[type=text]').forEach(i=>{
+    i.addEventListener('input', ()=>{
+      state.attachments[i.dataset.cat][i.dataset.idx].note = i.value;
+      maybeAutosave();
     });
   });
 }
 
-/* ---------- statement computation (flat shape, reusable for saved snapshots) ---------- */
-function computeStatement(start, end){
-  return state.employees.map(emp=>{
-    const list = state.transactions.filter(t=>t.employeeId===emp.id && t.date>=start && t.date<=end)
-      .map(t=>({date:t.date, type:t.type, amount:t.amount, hours:t.hours, rate:t.rate, reason:t.reason}));
-    const sum = (type)=> list.filter(t=>t.type===type).reduce((a,t)=>a+num(t.amount),0);
-    const incentive = sum('incentive'), deduction = sum('deduction'), withdrawal = sum('withdrawal'), overtime = sum('overtime');
-    const net = num(emp.baseSalary) + incentive + overtime - deduction - withdrawal;
-    return {id:emp.id, name:emp.name||'(بدون اسم)', baseSalary:num(emp.baseSalary), incentive, overtime, deduction, withdrawal, net, list};
-  });
-}
-function computeTotals(data){
-  return data.reduce((a,d)=>({base:a.base+d.baseSalary, inc:a.inc+d.incentive, ot:a.ot+d.overtime, ded:a.ded+d.deduction, wd:a.wd+d.withdrawal, net:a.net+d.net}), {base:0,inc:0,ot:0,ded:0,wd:0,net:0});
-}
-function renderStatementTable(bodyId, totalRowId, data){
-  document.getElementById(bodyId).innerHTML = data.map(d=>`
-    <tr>
-      <td>${d.name}</td>
-      <td>${fmt(d.baseSalary)}</td>
-      <td class="calc pos">${fmt(d.incentive)}</td>
-      <td class="calc pos">${fmt(d.overtime)}</td>
-      <td class="calc neg">${fmt(d.deduction)}</td>
-      <td class="calc neg">${fmt(d.withdrawal)}</td>
-      <td class="calc">${fmt(d.net)}</td>
-    </tr>`).join('');
-  const totals = computeTotals(data);
-  if(totalRowId) document.getElementById(totalRowId).innerHTML = `<td>الإجمالي</td><td>${fmt(totals.base)}</td><td>${fmt(totals.inc)}</td><td>${fmt(totals.ot)}</td><td>${fmt(totals.ded)}</td><td>${fmt(totals.wd)}</td><td>${fmt(totals.net)}</td>`;
-  return totals;
-}
-function renderBreakdown(elId, data){
-  const wrap = document.getElementById(elId);
-  const withTx = data.filter(d=>d.list.length>0);
-  if(withTx.length===0){ wrap.innerHTML=''; return; }
-  wrap.innerHTML = '<h3>تفاصيل الحركات مع الأسباب</h3>' + withTx.map(d=>`
-    <div class="breakdown-emp">
-      <div class="name">${d.name}</div>
-      ${d.list.sort((a,b)=>a.date.localeCompare(b.date)).map(t=>`
-        <div class="breakdown-row">
-          <span><span class="tag ${t.type}">${txTypeLabel[t.type]}</span> ${t.date} — ${(t.reason||'بدون سبب مذكور').replace(/</g,'&lt;')} ${t.type==='overtime'&&t.hours?`(${t.hours} س × ${fmt(t.rate||0)})`:''}</span>
-          <span>${fmt(t.amount)} ريال</span>
-        </div>`).join('')}
-    </div>`).join('');
-}
+/* ---------- summary / KPIs ---------- */
+function renderSummary(){
+  renderDeptSummary();
+  const h = state.header;
+  const grossRevenue = state._deptTotals ? state._deptTotals.revenue : 0;
+  const netRevenue = state._deptTotals ? state._deptTotals.netRevenue : 0;
+  const appQtyTotal = state._deptTotals ? state._deptTotals.appQty : 0;
+  const deptLoss = state._deptTotals ? state._deptTotals.loss : 0;
+  const cashNetworkTotal = state._cashNetworkTotal || 0;
+  const variance = state._variance || 0;
+  const variancePct = state._variancePct || 0;
+  const allChannels = cashNetworkTotal + num(h.keetaTotal) + num(h.hungerTotal) + num(h.credit);
 
-function renderStatement(){
-  if(!document.getElementById('stmt_start').value){
-    const r = monthRange();
-    document.getElementById('stmt_start').value = r.start;
-    document.getElementById('stmt_end').value = r.end;
-  }
-  const start = document.getElementById('stmt_start').value;
-  const end = document.getElementById('stmt_end').value;
-  const data = computeStatement(start, end);
-  renderStatementTable('stmtBody','stmtTotalRow', data);
-  renderBreakdown('stmtBreakdown', data);
-  state._currentStatement = {start, end, data};
-  renderSavedReports();
-}
-document.getElementById('stmt_start').addEventListener('input', renderStatement);
-document.getElementById('stmt_end').addEventListener('input', renderStatement);
-
-/* ---------- saved monthly reports archive ---------- */
-document.getElementById('btnSaveStatement').addEventListener('click', ()=>{
-  const cur = state._currentStatement || (renderStatement(), state._currentStatement);
-  const totals = cur.data.reduce((a,d)=>a+d.net, 0);
-  state.savedReports.push({id:uid(), start:cur.start, end:cur.end, savedAt:new Date().toISOString(), data:JSON.parse(JSON.stringify(cur.data)), totalNet:totals});
-  renderSavedReports();
-  alert('تم حفظ الكشف في الأرشيف.');
-});
-function renderSavedReports(){
-  const body = document.getElementById('savedBody');
-  const sorted = [...state.savedReports].sort((a,b)=> b.savedAt.localeCompare(a.savedAt));
-  body.innerHTML = sorted.map(sr=>`
-    <tr>
-      <td>${sr.start} إلى ${sr.end}</td>
-      <td>${sr.savedAt.slice(0,10)}</td>
-      <td>${fmt(sr.totalNet)} ريال</td>
-      <td><button class="btn btn-outline" data-action="view" data-id="${sr.id}" style="padding:6px 12px;font-size:12px;">عرض للتصدير</button></td>
-      <td><button class="del-btn" data-action="del" data-id="${sr.id}" title="حذف">×</button></td>
-    </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--ink-faint);padding:14px;">لا توجد كشوف محفوظة بعد</td></tr>`;
-  body.querySelectorAll('[data-action="view"]').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const sr = state.savedReports.find(x=>x.id===b.dataset.id);
-      document.querySelector('nav.tabs button[data-tab="reports"]').click();
-      document.querySelector('#reportTypeSeg button[data-type="monthly"]').click();
-      renderReport({type:'monthly', start:sr.start, end:sr.end, data:sr.data, saved:true});
-    });
-  });
-  body.querySelectorAll('[data-action="del"]').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      if(!confirm('حذف هذا الكشف من الأرشيف؟')) return;
-      state.savedReports = state.savedReports.filter(x=>x.id!==b.dataset.id);
-      renderSavedReports();
-    });
-  });
-}
-
-/* ---------- ticker (current calendar month) ---------- */
-function recalcTicker(){
-  const r = monthRange();
-  const data = computeStatement(r.start, r.end);
-  const total = data.reduce((a,d)=>a+d.net,0);
-  document.getElementById('tickerValue').textContent = fmt(total)+' ريال';
-}
-
-/* ---------- reports tab ---------- */
-document.getElementById('rep_date').value = todayStr();
-{ const r = monthRange(); document.getElementById('rep_start').value = r.start; document.getElementById('rep_end').value = r.end; }
-let reportType = 'daily';
-document.querySelectorAll('#reportTypeSeg button').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    document.querySelectorAll('#reportTypeSeg button').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    reportType = b.dataset.type;
-    document.getElementById('reportDailyField').style.display = reportType==='daily' ? '' : 'none';
-    document.getElementById('reportStartField').style.display = reportType==='monthly' ? '' : 'none';
-    document.getElementById('reportEndField').style.display = reportType==='monthly' ? '' : 'none';
-    renderReport();
-  });
-});
-document.getElementById('rep_date').addEventListener('input', ()=>renderReport());
-document.getElementById('rep_start').addEventListener('input', ()=>renderReport());
-document.getElementById('rep_end').addEventListener('input', ()=>renderReport());
-
-function renderReport(forced){
-  const thead = document.getElementById('reportThead');
-  const tbody = document.getElementById('reportBody');
-  const kpis = document.getElementById('reportKpis');
-
-  if(forced){
-    reportType = 'monthly';
-    thead.innerHTML = '<tr><th>الموظف</th><th>الراتب الأساسي</th><th>تحفيز</th><th>إضافي</th><th>خصومات</th><th>مسحوبات</th><th>الصافي</th></tr>';
-    const totals = computeTotals(forced.data);
-    tbody.innerHTML = forced.data.map(d=>`<tr><td>${d.name}</td><td>${fmt(d.baseSalary)}</td><td>${fmt(d.incentive)}</td><td>${fmt(d.overtime)}</td><td>${fmt(d.deduction)}</td><td>${fmt(d.withdrawal)}</td><td>${fmt(d.net)}</td></tr>`).join('');
-    kpis.innerHTML = [
-      {l:'الفترة', v:`${forced.start} → ${forced.end}`},
-      {l:'عدد الموظفين', v:forced.data.length},
-      {l:'إجمالي صافي الرواتب', v:fmt(totals.net)+' ريال'},
-    ].map(k=>`<div class="kpi"><div class="label">${k.l}</div><div class="value">${k.v}</div></div>`).join('');
-    state._reportData = {type:'monthly', start:forced.start, end:forced.end, data:forced.data};
-    return;
-  }
-
-  if(reportType==='daily'){
-    const date = document.getElementById('rep_date').value || todayStr();
-    const list = state.transactions.filter(t=>t.date===date).sort((a,b)=> a.date.localeCompare(b.date));
-    thead.innerHTML = '<tr><th>الموظف</th><th>النوع</th><th>التفاصيل</th><th>المبلغ</th><th>السبب</th></tr>';
-    tbody.innerHTML = list.map(t=>`<tr><td>${empName(t.employeeId)}</td><td><span class="tag ${t.type}">${txTypeLabel[t.type]}</span></td><td>${txDetails(t)}</td><td>${fmt(t.amount)}</td><td>${(t.reason||'').replace(/</g,'&lt;')}</td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--ink-faint);padding:14px;">لا توجد حركات في هذا التاريخ</td></tr>';
-    const ded = list.filter(t=>t.type==='deduction').reduce((a,t)=>a+t.amount,0);
-    const wd = list.filter(t=>t.type==='withdrawal').reduce((a,t)=>a+t.amount,0);
-    const inc = list.filter(t=>t.type==='incentive').reduce((a,t)=>a+t.amount,0);
-    const ot = list.filter(t=>t.type==='overtime').reduce((a,t)=>a+t.amount,0);
-    kpis.innerHTML = [
-      {l:'عدد الحركات', v:list.length},
-      {l:'إجمالي الخصومات', v:fmt(ded)+' ريال'},
-      {l:'إجمالي المسحوبات', v:fmt(wd)+' ريال'},
-      {l:'إجمالي التحفيز', v:fmt(inc)+' ريال'},
-      {l:'إجمالي الإضافي', v:fmt(ot)+' ريال'},
-    ].map(k=>`<div class="kpi"><div class="label">${k.l}</div><div class="value">${k.v}</div></div>`).join('');
-    state._reportData = {type:'daily', date, list};
-  } else {
-    const start = document.getElementById('rep_start').value || monthRange().start;
-    const end = document.getElementById('rep_end').value || monthRange().end;
-    const data = computeStatement(start, end);
-    thead.innerHTML = '<tr><th>الموظف</th><th>الراتب الأساسي</th><th>تحفيز</th><th>إضافي</th><th>خصومات</th><th>مسحوبات</th><th>الصافي</th></tr>';
-    tbody.innerHTML = data.map(d=>`<tr><td>${d.name}</td><td>${fmt(d.baseSalary)}</td><td>${fmt(d.incentive)}</td><td>${fmt(d.overtime)}</td><td>${fmt(d.deduction)}</td><td>${fmt(d.withdrawal)}</td><td>${fmt(d.net)}</td></tr>`).join('');
-    const totals = data.reduce((a,d)=>({base:a.base+d.baseSalary, net:a.net+d.net}), {base:0,net:0});
-    kpis.innerHTML = [
-      {l:'عدد الموظفين', v:data.length},
-      {l:'إجمالي الرواتب الأساسية', v:fmt(totals.base)+' ريال'},
-      {l:'إجمالي صافي الرواتب', v:fmt(totals.net)+' ريال'},
-    ].map(k=>`<div class="kpi"><div class="label">${k.l}</div><div class="value">${k.v}</div></div>`).join('');
-    state._reportData = {type:'monthly', start, end, data};
-  }
+  const kpis = [
+    {label:'إجمالي مبيعات الأقسام (شامل كيتا وهنجر)', value: fmt(grossRevenue)+' ريال', cls:''},
+    {label:'كمية كيتا+هنجر المستبعدة من الجرد', value: appQtyTotal.toFixed(1)+' قطعة', cls:''},
+    {label:'صافي مبيعات الأقسام (بدون كيتا وهنجر)', value: fmt(netRevenue)+' ريال', cls:''},
+    {label:'إجمالي الكاش + الشبكة', value: fmt(cashNetworkTotal)+' ريال', cls:''},
+    {label:'الفرق (كاش+شبكة عن صافي الأقسام)', value: fmt(variance)+' ريال', cls: Math.abs(variancePct)<=3 ? 'ok':'alert'},
+    {label:'نسبة العجز / الزيادة', value: (variance>=0?'+':'')+variancePct.toFixed(1)+' ٪', cls: Math.abs(variancePct)<=3 ? 'ok':'alert'},
+    {label:'مسحوبات الصندوق (مشتريات اليوم)', value: fmt(state._purchasesTotal||0)+' ريال', cls:''},
+    {label:'خسارة التوالف الإجمالية', value: fmt(deptLoss)+' ريال', cls: deptLoss>0 ? 'alert':''},
+    {label:'إجمالي كل القنوات (كاش+شبكة+كيتا+هنجر+آجل)', value: fmt(allChannels)+' ريال', cls:''},
+  ];
+  document.getElementById('kpis').innerHTML = kpis.map(k=>`<div class="kpi ${k.cls}"><div class="label">${k.label}</div><div class="value">${k.value}</div></div>`).join('');
 }
 
 /* ---------- export excel ---------- */
-function buildEmployeesRows(){
-  return [['الاسم','الوظيفة','الراتب الأساسي','نوع الدوام','من (1)','إلى (1)','من (2)','إلى (2)','ساعات العمل اليومية','سعر الساعة الإضافي'],
-    ...state.employees.map(e=>[e.name,e.position,num(e.baseSalary),e.shiftType,e.shiftStart,e.shiftEnd,e.shift2Start||'',e.shift2End||'',num(e.dailyHours),num(e.overtimeRate)])];
-}
 document.getElementById('btnExcel').addEventListener('click', ()=>{
+  const h = state.header;
   const wb = XLSX.utils.book_new();
+
   const creditRows = [
     ['تم تصميم هذا النظام بواسطة', 'م.منصور أنيس القحطاني'],
     ['المسمى الوظيفي', 'مطور برمجيات Full Stack — مهندس تقني معلومات'],
-    ['للتواصل', '0557771329 (واتس وا اتصال)'],
+    ['للتواصل', '0557771329 (واتس واتصال)'],
   ];
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(creditRows), 'معلومات النظام');
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(buildEmployeesRows()), 'الموظفون');
 
-  const r = state._reportData || (renderReport(), state._reportData);
-  if(r.type==='daily'){
-    const rows = [['التاريخ','الموظف','النوع','المبلغ','ساعات','سعر الساعة','السبب'], ...r.list.map(t=>[t.date, empName(t.employeeId), txTypeLabel[t.type], t.amount, t.hours||'', t.rate||'', t.reason||''])];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'تقرير يومي');
-  } else {
-    const rows = [['الموظف','الراتب الأساسي','تحفيز','إضافي','خصومات','مسحوبات','الصافي'], ...r.data.map(d=>[d.name, d.baseSalary, d.incentive, d.overtime, d.deduction, d.withdrawal, d.net])];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'كشف شهري');
-    const txRows = [['التاريخ','الموظف','النوع','المبلغ','ساعات','سعر الساعة','السبب']];
-    r.data.forEach(d=> d.list.forEach(t=> txRows.push([t.date, d.name, txTypeLabel[t.type], t.amount, t.hours||'', t.rate||'', t.reason||''])));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(txRows), 'تفاصيل الحركات');
-  }
-  const label = r.type==='daily' ? r.date : `${r.start}_${r.end}`;
-  XLSX.writeFile(wb, `رواتب-${label}.xlsx`);
+  renderDeptSummary();
+  const deptRevenue = state._deptTotals.revenue;
+  const headerRows = [
+    ['التاريخ', h.date||''], ['اسم الكاشير', h.cashier||''],
+    ['العهدة السابقة (توثيق فقط)', num(h.prevFloat)], ['العهدة الجديدة (توثيق فقط)', num(h.newFloat)],
+    ['المبلغ المتوفر في الصندوق', num(h.cashAvailable)], ['إجمالي المشتريات (يُضاف للكاش)', state._purchasesTotal||0],
+    ['إجمالي مبيعات الكاش', state._cashSalesTotal||0], ['مبيعات الشبكة', num(h.network)],
+    ['إجمالي الكاش + الشبكة', state._cashNetworkTotal||0],
+    ['كيتا - إجمالي المبلغ', num(h.keetaTotal)], ['كيتا - عدد الدجاج', num(h.keetaChicken)], ['كيتا - عدد المشروبات', num(h.keetaDrinks)], ['كيتا - عدد السلطات', num(h.keetaSalads)], ['كيتا - عدد الماء', num(h.keetaWater)],
+    ['هنجر - إجمالي المبلغ', num(h.hungerTotal)], ['هنجر - عدد الدجاج', num(h.hungerChicken)], ['هنجر - عدد المشروبات', num(h.hungerDrinks)], ['هنجر - عدد السلطات', num(h.hungerSalads)], ['هنجر - عدد الماء', num(h.hungerWater)],
+    ['بيع آجل (توثيق فقط)', num(h.credit)],
+    ['الاستلامات الخارجية', num(h.external)], ['المصروفات', num(h.expenses)],
+    ['إجمالي مبيعات الأقسام (من الجرد)', deptRevenue],
+    ['الفرق (كاش+شبكة عن جرد الأقسام)', state._variance||0],
+    ['نسبة العجز/الزيادة %', Number((state._variancePct||0).toFixed(2))],
+    ['ملاحظات', h.notes||'']
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(headerRows), 'التقرير اليومي');
+
+  const purchaseRows = [['الصنف','السعر','ملاحظة'], ...(state.header.purchasesList||[]).map(p=>[p.name||'', num(p.price), p.note||''])];
+  purchaseRows.push(['الإجمالي', state._purchasesTotal||0, '']);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(purchaseRows), 'المشتريات');
+
+  const deptData = state._deptSummary;
+  const deptRows = [['القسم','بداية','مشتريات','المتبقي','توالف','المبيعات (كمية)','قيمة المبيعات','خسارة التوالف'], ...deptData.map(d=>[d.dept,d.beg,d.purch,d.remain,d.damaged,d.qty,d.revenue,d.loss])];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(deptRows), 'ملخص الأقسام');
+
+  const itemRows = [['القسم','الصنف','السعر','بداية','مشتريات','المتبقي','توالف','المبيعات (كمية)','قيمة المبيعات','خسارة التوالف'],
+    ...itemsData.map(it=>{const v=state.items[it.id]; return [it.dept,it.name,num(v.price),v.beg,v.purch,v.remain,v.damaged,itemSalesQty(v),itemRevenue(v),itemLoss(v)];})];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(itemRows), 'تفاصيل الأصناف');
+
+  const attRows = [['القسم','اسم الملف','ملاحظة']];
+  attCats.forEach(cat=>{
+    state.attachments[cat.key].forEach(a=> attRows.push([cat.label, a.name, a.note||'']));
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(attRows), 'المرفقات');
+
+  XLSX.writeFile(wb, `جرد-${h.date||'اليوم'}.xlsx`);
 });
 
-/* ---------- export pdf (robust canvas-slicing approach) ---------- */
-function buildReportPrintHTML(){
-  const r = state._reportData;
-  const tableStyle = 'width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px;';
-  const th = 'style="border:1px solid #ccc;padding:4px;background:#f2ede2;text-align:right;"';
-  const td = 'style="border:1px solid #ccc;padding:4px;text-align:right;"';
-  let html = `
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;background:#F3DCC9;border:1px solid #E1D6BE;border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:10px;">
-    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-      <span style="background:#fff;border:1px solid #E1D6BE;border-radius:16px;padding:5px 10px;font-weight:800;">تم تصميم هذا النظام بواسطة م.منصور أنيس القحطاني</span>
-      <span style="background:#fff;border:1px solid #E1D6BE;border-radius:16px;padding:5px 10px;">مطور برمجيات Full Stack</span>
-      <span style="background:#fff;border:1px solid #E1D6BE;border-radius:16px;padding:5px 10px;">مهندس تقني معلومات</span>
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-      <span style="background:#fff;border:1px solid #E1D6BE;border-radius:16px;padding:5px 10px;font-weight:700;color:#8C3A10;">📞 0557771329</span>
-      <span style="background:#fff;border:1px solid #E1D6BE;border-radius:16px;padding:5px 10px;">واتس &amp; اتصال</span>
-    </div>
-  </div>`;
-  if(r.type==='daily'){
-    html += `<h2 style="font-size:16px;margin:0 0 12px;">تقرير حركات يوم ${r.date}</h2>
-    <table style="${tableStyle}"><tr><th ${th}>الموظف</th><th ${th}>النوع</th><th ${th}>التفاصيل</th><th ${th}>المبلغ</th><th ${th}>السبب</th></tr>
-    ${r.list.map(t=>`<tr><td ${td}>${empName(t.employeeId)}</td><td ${td}>${txTypeLabel[t.type]}</td><td ${td}>${txDetails(t)}</td><td ${td}>${fmt(t.amount)}</td><td ${td}>${(t.reason||'').replace(/</g,'&lt;')}</td></tr>`).join('')}
-    </table>`;
-  } else {
-    html += `<h2 style="font-size:16px;margin:0 0 12px;">كشف رواتب — من ${r.start} إلى ${r.end}</h2>
-    <table style="${tableStyle}"><tr><th ${th}>الموظف</th><th ${th}>الراتب الأساسي</th><th ${th}>تحفيز</th><th ${th}>إضافي</th><th ${th}>خصومات</th><th ${th}>مسحوبات</th><th ${th}>الصافي</th></tr>
-    ${r.data.map(d=>`<tr><td ${td}>${d.name}</td><td ${td}>${fmt(d.baseSalary)}</td><td ${td}>${fmt(d.incentive)}</td><td ${td}>${fmt(d.overtime)}</td><td ${td}>${fmt(d.deduction)}</td><td ${td}>${fmt(d.withdrawal)}</td><td ${td}>${fmt(d.net)}</td></tr>`).join('')}
-    </table>
-    <h3 style="font-size:14px;margin:14px 0 6px;">تفاصيل الحركات مع الأسباب</h3>
-    <table style="${tableStyle}"><tr><th ${th}>التاريخ</th><th ${th}>الموظف</th><th ${th}>النوع</th><th ${th}>التفاصيل</th><th ${th}>المبلغ</th><th ${th}>السبب</th></tr>
-    ${r.data.flatMap(d=>d.list.map(t=>`<tr><td ${td}>${t.date}</td><td ${td}>${d.name}</td><td ${td}>${txTypeLabel[t.type]}</td><td ${td}>${txDetails(t)}</td><td ${td}>${fmt(t.amount)}</td><td ${td}>${(t.reason||'').replace(/</g,'&lt;')}</td></tr>`)).join('')}
-    </table>`;
-  }
-  return html;
-}
+/* ---------- export pdf ---------- */
 document.getElementById('btnPdf').addEventListener('click', async ()=>{
   const btn = document.getElementById('btnPdf');
   btn.disabled = true; btn.textContent = 'جارِ التصدير...';
   let hideWrap = null;
   try{
-    if(!state._reportData) renderReport();
+    renderDeptSummary();
     hideWrap = document.createElement('div');
     hideWrap.style.cssText = 'height:0; overflow:hidden;';
     const container = document.createElement('div');
     container.style.cssText = 'width:680px; background:#fff; padding:24px; font-family:Tajawal,sans-serif; direction:rtl; color:#222;';
-    container.innerHTML = buildReportPrintHTML();
+    container.innerHTML = buildPrintHTML();
     hideWrap.appendChild(container);
     document.body.appendChild(hideWrap);
-    await new Promise(res=>requestAnimationFrame(()=>requestAnimationFrame(res)));
+
+    const imgs = Array.from(container.querySelectorAll('img'));
+    await Promise.all(imgs.map(img => img.decode ? img.decode().catch(()=>{}) : Promise.resolve()));
+    await new Promise(r => requestAnimationFrame(()=>requestAnimationFrame(r)));
 
     const canvas = await html2canvas(container, {scale:2, backgroundColor:'#ffffff', useCORS:true});
-    document.body.removeChild(hideWrap); hideWrap = null;
+    document.body.removeChild(hideWrap);
+    hideWrap = null;
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({unit:'pt', format:'a4'});
@@ -770,7 +842,9 @@ document.getElementById('btnPdf').addEventListener('click', async ()=>{
     const imgWidth = pageWidth;
     const imgHeight = canvas.height * imgWidth / canvas.width;
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
-    let heightLeft = imgHeight, position = 0;
+
+    let heightLeft = imgHeight;
+    let position = 0;
     doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
     while(heightLeft > 0){
@@ -779,80 +853,197 @@ document.getElementById('btnPdf').addEventListener('click', async ()=>{
       doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
     }
-    const label = state._reportData.type==='daily' ? state._reportData.date : `${state._reportData.start}_${state._reportData.end}`;
-    doc.save(`رواتب-${label}.pdf`);
-  }catch(err){ alert('حدث خطأ أثناء إنشاء PDF: '+err.message); }
-  finally{
+    doc.save(`تقرير-${state.header.date||'اليوم'}.pdf`);
+  }catch(err){
+    alert('حدث خطأ أثناء إنشاء PDF: '+err.message);
+  }finally{
     if(hideWrap && hideWrap.parentNode) document.body.removeChild(hideWrap);
     btn.disabled = false; btn.textContent = '⬇ تصدير PDF';
   }
 });
 
-/* ---------- json backup ---------- */
+function buildPrintHTML(){
+  const h = state.header;
+  const deptData = state._deptSummary || computeDeptSummary();
+  const tableStyle = 'width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px;';
+  const th = 'style="border:1px solid #ccc;padding:4px;background:#f2ede2;text-align:right;"';
+  const td = 'style="border:1px solid #ccc;padding:4px;text-align:right;"';
+
+  let html = `
+  <div style="background:#f3dcc9;border-right:4px solid #C1531B;border-radius:8px;padding:12px 18px;margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;font-size:13.5px;font-family:Tajawal,sans-serif;">
+    <span style="font-weight:700;color:#8C3A10;font-family:Cairo,sans-serif;">تم تصميم هذا النظام بواسطة</span>
+    <span style="font-weight:700;color:#8C3A10;font-family:Cairo,sans-serif;">م.منصور أنيس القحطاني</span>
+    <span style="background:#fffdf8;padding:0 10px;border-radius:30px;font-size:12px;border:1px solid #E1D6BE;font-weight:500;">مطور برمجيات Full Stack</span>
+    <span style="background:#fffdf8;padding:0 10px;border-radius:30px;font-size:12px;border:1px solid #E1D6BE;font-weight:500;">مهندس تقني معلومات</span>
+    <span style="display:inline-flex;align-items:center;gap:5px;background:#fffdf8;padding:2px 12px;border-radius:30px;border:1px solid #E1D6BE;direction:ltr;font-weight:500;">
+      📞 <span style="direction:rtl;">0557771329</span> <span style="font-size:11px;color:#736A5C;">واتس &amp; اتصال</span>
+    </span>
+  </div>
+  `;
+
+  html += `<h2 style="font-size:16px;margin:0 0 6px;">تقرير الجرد اليومي — ${h.date||''}</h2>
+  <p style="font-size:12px;color:#555;margin:0 0 14px;">الكاشير: ${h.cashier||''}</p>
+  <table style="${tableStyle}">
+    <tr><td ${td}>المتوفر بالصندوق</td><td ${td}>${fmt(num(h.cashAvailable))}</td><td ${td}>إجمالي المشتريات</td><td ${td}>${fmt(state._purchasesTotal||0)}</td></tr>
+    <tr><td ${td}>إجمالي مبيعات الكاش</td><td ${td}>${fmt(state._cashSalesTotal||0)}</td><td ${td}>مبيعات الشبكة</td><td ${td}>${fmt(num(h.network))}</td></tr>
+    <tr><td ${td}><b>إجمالي الكاش + الشبكة</b></td><td ${td}><b>${fmt(state._cashNetworkTotal||0)}</b></td><td ${td}>المصروفات</td><td ${td}>${fmt(num(h.expenses))}</td></tr>
+    <tr><td ${td}>كيتا (إجمالي)</td><td ${td}>${fmt(num(h.keetaTotal))}</td><td ${td}>هنجر (إجمالي)</td><td ${td}>${fmt(num(h.hungerTotal))}</td></tr>
+    <tr><td ${td}>بيع آجل (توثيق)</td><td ${td}>${fmt(num(h.credit))}</td><td ${td}>العهدة سابقة/جديدة (توثيق)</td><td ${td}>${fmt(num(h.prevFloat))} / ${fmt(num(h.newFloat))}</td></tr>
+  </table>
+
+  <h3 style="font-size:14px;margin:14px 0 6px;">كيتا وهنجر — تفصيل الكميات</h3>
+  <table style="${tableStyle}"><tr><th ${th}>التطبيق</th><th ${th}>دجاج</th><th ${th}>مشروبات</th><th ${th}>سلطات</th><th ${th}>ماء</th></tr>
+    <tr><td ${td}>كيتا</td><td ${td}>${num(h.keetaChicken)}</td><td ${td}>${num(h.keetaDrinks)}</td><td ${td}>${num(h.keetaSalads)}</td><td ${td}>${num(h.keetaWater)}</td></tr>
+    <tr><td ${td}>هنجر</td><td ${td}>${num(h.hungerChicken)}</td><td ${td}>${num(h.hungerDrinks)}</td><td ${td}>${num(h.hungerSalads)}</td><td ${td}>${num(h.hungerWater)}</td></tr>
+  </table>
+
+  <p style="font-size:12px;"><b>ملاحظات:</b> ${(h.notes||'').replace(/</g,'&lt;')}</p>
+
+  <h3 style="font-size:14px;margin:14px 0 6px;">المشتريات الجديدة (إجمالي: ${fmt(state._purchasesTotal||0)} ريال)</h3>
+  <table style="${tableStyle}"><tr><th ${th}>الصنف</th><th ${th}>السعر</th><th ${th}>ملاحظة</th></tr>
+  ${(state.header.purchasesList||[]).map(p=>`<tr><td ${td}>${(p.name||'').replace(/</g,'&lt;')}</td><td ${td}>${fmt(num(p.price))}</td><td ${td}>${(p.note||'').replace(/</g,'&lt;')}</td></tr>`).join('')}
+  </table>
+
+  <h3 style="font-size:14px;margin:14px 0 6px;">ملخص الأقسام</h3>
+  <table style="${tableStyle}"><tr><th ${th}>القسم</th><th ${th}>بداية</th><th ${th}>مشتريات</th><th ${th}>المتبقي</th><th ${th}>توالف</th><th ${th}>كمية</th><th ${th}>قيمة المبيعات</th><th ${th}>خسارة التوالف</th></tr>
+  ${deptData.map(d=>`<tr><td ${td}>${d.dept}</td><td ${td}>${d.beg.toFixed(1)}</td><td ${td}>${d.purch.toFixed(1)}</td><td ${td}>${d.remain.toFixed(1)}</td><td ${td}>${d.damaged.toFixed(1)}</td><td ${td}>${d.qty.toFixed(1)}</td><td ${td}>${fmt(d.revenue)}</td><td ${td}>${fmt(d.loss)}</td></tr>`).join('')}
+  </table>
+
+  <h3 style="font-size:14px;margin:14px 0 6px;">تفاصيل الأصناف</h3>
+  <table style="${tableStyle}"><tr><th ${th}>القسم</th><th ${th}>الصنف</th><th ${th}>السعر</th><th ${th}>بداية</th><th ${th}>مشتريات</th><th ${th}>المتبقي</th><th ${th}>توالف</th><th ${th}>كمية</th><th ${th}>قيمة المبيعات</th><th ${th}>خسارة التوالف</th></tr>
+  ${itemsData.map(it=>{const v=state.items[it.id]; return `<tr><td ${td}>${it.dept}</td><td ${td}>${it.name}</td><td ${td}>${fmt(num(v.price))}</td><td ${td}>${v.beg}</td><td ${td}>${v.purch}</td><td ${td}>${v.remain}</td><td ${td}>${v.damaged}</td><td ${td}>${itemSalesQty(v).toFixed(1)}</td><td ${td}>${fmt(itemRevenue(v))}</td><td ${td}>${fmt(itemLoss(v))}</td></tr>`;}).join('')}
+  </table>
+
+  <h3 style="font-size:14px;margin:14px 0 6px;">التسوية النهائية</h3>
+  <table style="${tableStyle}">
+    <tr><td ${td}>إجمالي مبيعات الأقسام (من الجرد)</td><td ${td}><b>${fmt(state._deptTotals?state._deptTotals.revenue:0)}</b></td></tr>
+    <tr><td ${td}>إجمالي الكاش + الشبكة</td><td ${td}><b>${fmt(state._cashNetworkTotal||0)}</b></td></tr>
+    <tr><td ${td}>الفرق</td><td ${td}><b>${fmt(state._variance||0)}</b></td></tr>
+    <tr><td ${td}>نسبة العجز/الزيادة</td><td ${td}><b>${(state._variance>=0?'+':'')}${(state._variancePct||0).toFixed(1)}٪</b></td></tr>
+  </table>`;
+
+  attCats.forEach(cat=>{
+    const list = state.attachments[cat.key];
+    if(list.length===0) return;
+    html += `<h3 style="font-size:14px;margin:14px 0 6px;">${cat.label}</h3><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">`;
+    list.forEach(a=>{
+      html += `<div style="width:170px;font-size:10px;text-align:center;">
+        <img src="${a.dataUrl}" style="width:170px;height:170px;object-fit:cover;border:1px solid #ccc;border-radius:4px;"><br>${(a.note||'').replace(/</g,'&lt;')}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  return html;
+}
+
+/* ---------- save / import json ---------- */
 document.getElementById('btnSaveJson').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(state)], {type:'application/json'});
+  const exportState = JSON.parse(JSON.stringify(state));
+  exportState._whoami = {
+    designer: 'م.منصور أنيس القحطاني',
+    role1: 'مطور برمجيات Full Stack',
+    role2: 'مهندس تقني معلومات',
+    contact: '0557771329'
+  };
+  const blob = new Blob([JSON.stringify(exportState)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = `رواتب-نسخة-${todayStr()}.json`; a.click();
+  const a = document.createElement('a');
+  a.href = url; a.download = `نسخة-${state.header.date||'اليوم'}.json`;
+  a.click();
   URL.revokeObjectURL(url);
 });
 document.getElementById('importJson').addEventListener('change', (e)=>{
-  const file = e.target.files[0]; if(!file) return;
+  const file = e.target.files[0];
+  if(!file) return;
   const reader = new FileReader();
   reader.onload = ()=>{
     try{
       const data = JSON.parse(reader.result);
-      state.employees = data.employees || [];
-      state.transactions = data.transactions || [];
-      state.savedReports = data.savedReports || [];
-      renderEmployees(); renderTransactions(); recalcTicker(); renderStatement();
-      alert('تم استيراد النسخة بنجاح.');
+      delete data._whoami;
+      Object.assign(state, data);
+      applyStateToUI();
+      alert('تم استيراد النسخة بنجاح (تشمل الصور).');
+      maybeAutosave();
     }catch(err){ alert('تعذّر قراءة الملف: '+err.message); }
   };
   reader.readAsText(file);
   e.target.value='';
 });
 
-/* ---------- excel import (own export format, merges into current data) ---------- */
+/* ---------- import from a previously exported Excel file (own format only) ---------- */
+const excelLabelMap = {
+  'التاريخ':'date', 'اسم الكاشير':'cashier',
+  'العهدة السابقة (توثيق فقط)':'prevFloat', 'العهدة الجديدة (توثيق فقط)':'newFloat',
+  'المبلغ المتوفر في الصندوق':'cashAvailable', 'مبيعات الشبكة':'network',
+  'كيتا - إجمالي المبلغ':'keetaTotal', 'كيتا - عدد الدجاج':'keetaChicken', 'كيتا - عدد المشروبات':'keetaDrinks', 'كيتا - عدد السلطات':'keetaSalads', 'كيتا - عدد الماء':'keetaWater',
+  'هنجر - إجمالي المبلغ':'hungerTotal', 'هنجر - عدد الدجاج':'hungerChicken', 'هنجر - عدد المشروبات':'hungerDrinks', 'هنجر - عدد السلطات':'hungerSalads', 'هنجر - عدد الماء':'hungerWater',
+  'بيع آجل (توثيق فقط)':'credit', 'الاستلامات الخارجية':'external', 'المصروفات':'expenses', 'ملاحظات':'notes'
+};
+function excelDateToStr(v){
+  if(v===undefined || v===null || v==='') return '';
+  if(typeof v === 'number'){
+    const d = XLSX.SSF.parse_date_code(v);
+    if(d) return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
+  }
+  return String(v);
+}
+function findItemMatch(dept, name){
+  return itemsData.find(it=> it.dept===String(dept||'').trim() && it.name===String(name||'').trim());
+}
+function parseOwnFormatWorkbook(wb){
+  const newHeader = {purchasesList:[]};
+  const reportSheet = wb.Sheets['التقرير اليومي'];
+  XLSX.utils.sheet_to_json(reportSheet, {header:1}).forEach(r=>{
+    const label = r[0], value = r[1];
+    if(label && excelLabelMap[label]!==undefined){
+      const key = excelLabelMap[label];
+      newHeader[key] = key==='date' ? excelDateToStr(value) : (value===undefined ? '' : value);
+    }
+  });
+
+  const purchSheet = wb.Sheets['المشتريات'];
+  if(purchSheet){
+    XLSX.utils.sheet_to_json(purchSheet, {header:1}).slice(1).forEach(r=>{
+      if(!r[0] || r[0]==='الإجمالي') return;
+      newHeader.purchasesList.push({name:r[0]||'', price:r[1]||0, note:r[2]||''});
+    });
+  }
+
+  const newItems = {};
+  itemsData.forEach(it=> newItems[it.id] = {price:it.defPrice, beg:0,purch:0,remain:0,damaged:0});
+  const itemsSheet = wb.Sheets['تفاصيل الأصناف'];
+  if(itemsSheet){
+    XLSX.utils.sheet_to_json(itemsSheet, {header:1}).slice(1).forEach(r=>{
+      const match = findItemMatch(r[0], r[1]);
+      if(match) newItems[match.id] = {price:num(r[2]), beg:num(r[3]), purch:num(r[4]), remain:num(r[5]), damaged:num(r[6])};
+    });
+  }
+
+  let attCount = 0;
+  const attSheet = wb.Sheets['المرفقات'];
+  if(attSheet) attCount = Math.max(0, XLSX.utils.sheet_to_json(attSheet, {header:1}).length - 1);
+
+  return {header:newHeader, items:newItems, attCount, note:attCount>0 ? `كانت هناك ${attCount} صورة مرفقة في النسخة الأصلية — الإكسل لا يخزّن الصور نفسها، فيلزم إعادة رفعها يدويًا من تبويب المرفقات إن احتجتها.` : ''};
+}
+
 document.getElementById('importExcel').addEventListener('change', (e)=>{
-  const file = e.target.files[0]; if(!file) return;
+  const file = e.target.files[0];
+  if(!file) return;
   const reader = new FileReader();
   reader.onload = ()=>{
     try{
       const wb = XLSX.read(reader.result, {type:'array'});
-      const empSheet = wb.Sheets['الموظفون'];
-      if(!empSheet){ alert('لم يتم التعرف على تنسيق الملف. تأكد أنه ملف مُصدَّر من هذه الصفحة.'); return; }
-
-      let addedEmp = 0, updatedEmp = 0;
-      XLSX.utils.sheet_to_json(empSheet, {header:1}).slice(1).forEach(r=>{
-        if(!r[0]) return;
-        const name = String(r[0]).trim();
-        let emp = state.employees.find(e=>(e.name||'').trim()===name);
-        if(!emp){ emp = {id:uid(), name}; state.employees.push(emp); addedEmp++; } else { updatedEmp++; }
-        emp.position = r[1]||''; emp.baseSalary = num(r[2]); emp.shiftType = r[3]||shiftTypes[0];
-        emp.shiftStart = r[4]||''; emp.shiftEnd = r[5]||''; emp.shift2Start = r[6]||''; emp.shift2End = r[7]||'';
-        emp.dailyHours = num(r[8]); emp.overtimeRate = num(r[9]); emp.overtimeManual = true;
-      });
-
-      let addedTx = 0;
-      const txSheetName = wb.Sheets['تفاصيل الحركات'] ? 'تفاصيل الحركات' : (wb.Sheets['تقرير يومي'] ? 'تقرير يومي' : null);
-      if(txSheetName){
-        XLSX.utils.sheet_to_json(wb.Sheets[txSheetName], {header:1}).slice(1).forEach(r=>{
-          const [date, empName_, typeLabel, amount, hours, rate, reason] = r;
-          if(!date || !empName_) return;
-          const emp = state.employees.find(e=>(e.name||'').trim()===String(empName_).trim());
-          if(!emp) return;
-          const typeKey = Object.keys(txTypeLabel).find(k=>txTypeLabel[k]===typeLabel);
-          if(!typeKey) return;
-          const dup = state.transactions.some(t=> t.employeeId===emp.id && t.date===String(date) && t.type===typeKey && num(t.amount)===num(amount) && (t.reason||'')===(reason||''));
-          if(dup) return;
-          const tx = {id:uid(), employeeId:emp.id, date:String(date), type:typeKey, amount:num(amount), reason:reason||''};
-          if(typeKey==='overtime'){ tx.hours = num(hours)||undefined; tx.rate = num(rate)||undefined; }
-          state.transactions.push(tx); addedTx++;
-        });
+      if(!wb.Sheets['التقرير اليومي']){
+        alert('تعذّر التعرف على تنسيق هذا الملف. الاسترداد يعمل فقط مع ملفات Excel المُصدَّرة من هذا الموقع بعد التحديث الجديد.');
+        return;
       }
-
-      renderEmployees(); renderTransactions(); recalcTicker(); renderStatement();
-      alert(`تم الاسترداد: ${addedEmp} موظف جديد، ${updatedEmp} موظف مُحدَّث، ${addedTx} حركة مالية جديدة مضافة (تم تجاوز أي حركات مكررة).`);
+      const result = parseOwnFormatWorkbook(wb);
+      state.header = result.header;
+      state.items = result.items;
+      state.attachments = {purchases:[], external:[], keeta:[], hunger:[]};
+      applyStateToUI();
+      alert('تم استرداد البيانات بنجاح.' + (result.note ? '\n\n'+result.note : ''));
+      maybeAutosave();
     }catch(err){ alert('تعذّر قراءة ملف الإكسل: '+err.message); }
   };
   reader.readAsArrayBuffer(file);
@@ -860,75 +1051,66 @@ document.getElementById('importExcel').addEventListener('change', (e)=>{
 });
 
 document.getElementById('btnReset').addEventListener('click', ()=>{
-  if(!confirm('سيتم حذف كل الموظفين والحركات المالية والكشوف المحفوظة. هل أنت متأكد؟')) return;
+  if(!confirm('سيتم تفريغ كل بيانات اليوم الحالية. هل أنت متأكد؟')) return;
   location.reload();
 });
 
-/* ---------- تذكرني: حفظ محلي دائم في هذا الجهاز/المتصفح ---------- */
-const REMEMBER_KEY = 'baladi_payroll_remember_v1';
-const DATA_KEY = 'baladi_payroll_data_v1';
+/* ---------- next day ---------- */
+document.getElementById('btnNextDay').addEventListener('click', ()=>{
+  if(!confirm('سيتم فتح يوم جديد:\n— التاريخ ينتقل لليوم التالي\n— العهدة الجديدة اليوم تصبح العهدة السابقة غدًا (توثيق فقط)\n— المتبقي في جرد الأصناف يصبح "بداية" الغد (والأسعار تبقى كما هي)\n— بقية الحقول والمرفقات والمشتريات وكيتا/هنجر تُفرّغ\n\nمتابعة؟')) return;
 
-function updateRememberStatus(msg){
-  const el = document.getElementById('rememberStatus');
-  if(el) el.textContent = msg;
-}
-function saveToLocalStorage(){
-  try{
-    localStorage.setItem(DATA_KEY, JSON.stringify({employees:state.employees, transactions:state.transactions, savedReports:state.savedReports}));
-    const t = new Date().toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
-    updateRememberStatus('✓ تم الحفظ التلقائي آخر مرة الساعة '+t);
-  }catch(err){
-    updateRememberStatus('تعذّر الحفظ التلقائي في هذا المتصفح: '+err.message);
-  }
-}
-function autosaveIfEnabled(){
-  if(localStorage.getItem(REMEMBER_KEY)==='1') saveToLocalStorage();
-}
+  const base = state.header.date ? new Date(state.header.date) : new Date();
+  base.setDate(base.getDate()+1);
+  const nextDate = base.toISOString().slice(0,10);
+  const newPrevFloat = num(state.header.newFloat);
+  const cashierName = state.header.cashier || '';
 
-document.getElementById('rememberMe').addEventListener('change', (e)=>{
-  if(e.target.checked){
-    localStorage.setItem(REMEMBER_KEY, '1');
-    saveToLocalStorage();
+  itemsData.forEach(it=>{
+    const carriedBeg = num(state.items[it.id].remain);
+    const keepPrice = num(state.items[it.id].price);
+    state.items[it.id] = {price:keepPrice, beg:carriedBeg, purch:0, remain:0, damaged:0};
+  });
+
+  state.header = {
+    date: nextDate, cashier: cashierName, prevFloat: newPrevFloat, newFloat:'',
+    cashAvailable:'', network:'',
+    keetaTotal:'', keetaChicken:'', keetaDrinks:'', keetaSalads:'', keetaWater:'',
+    hungerTotal:'', hungerChicken:'', hungerDrinks:'', hungerSalads:'', hungerWater:'',
+    credit:'', external:'', expenses:'', notes:'', purchasesList: []
+  };
+  state.attachments = {purchases:[], external:[], keeta:[], hunger:[]};
+
+  applyStateToUI();
+  document.querySelector('nav.tabs button[data-tab="report"]').click();
+  alert('تم تجهيز بيانات يوم '+nextDate+'. العهدة السابقة والمتبقي انتقلا تلقائيًا، والأسعار محفوظة.');
+  maybeAutosave();
+});
+
+/* ---------- "تذكرني" toggle ---------- */
+document.getElementById('chkRememberFields').addEventListener('change', function(){
+  if(this.checked){
+    if(loadFromLocalStorage()){
+      applyStateToUI();
+      alert('تم استعادة آخر نسخة محفوظة.');
+    } else {
+      saveToLocalStorage();
+    }
   } else {
-    localStorage.setItem(REMEMBER_KEY, '0');
-    updateRememberStatus('تم إيقاف الحفظ التلقائي (البيانات المحفوظة سابقًا تبقى محفوظة حتى تضغط "نسيان").');
+    localStorage.removeItem(LS_KEY);
   }
 });
-document.getElementById('btnForget').addEventListener('click', ()=>{
-  if(!confirm('سيتم حذف النسخة المحفوظة تلقائيًا على هذا الجهاز نهائيًا. البيانات الحالية المعروضة الآن لن تتأثر إلا بعد إعادة تحميل الصفحة. متابعة؟')) return;
-  localStorage.removeItem(DATA_KEY);
-  localStorage.setItem(REMEMBER_KEY, '0');
-  document.getElementById('rememberMe').checked = false;
-  updateRememberStatus('تم حذف النسخة المحفوظة على هذا الجهاز.');
-});
 
-/* يحفظ تلقائيًا كل بضع ثوانٍ إن كان "تذكرني" مفعّلًا، وأيضًا عند مغادرة الصفحة */
-setInterval(autosaveIfEnabled, 4000);
-window.addEventListener('beforeunload', autosaveIfEnabled);
-
-function tryRestoreFromLocalStorage(){
-  try{
-    if(localStorage.getItem(REMEMBER_KEY)!=='1') return false;
-    const raw = localStorage.getItem(DATA_KEY);
-    if(!raw) return false;
-    const data = JSON.parse(raw);
-    state.employees = data.employees || [];
-    state.transactions = data.transactions || [];
-    state.savedReports = data.savedReports || [];
-    document.getElementById('rememberMe').checked = true;
-    updateRememberStatus('تم استرجاع البيانات المحفوظة تلقائيًا من هذا الجهاز.');
-    return true;
-  }catch(err){
-    updateRememberStatus('تعذّر استرجاع البيانات المحفوظة: '+err.message);
-    return false;
-  }
+/* ---------- initial render + try auto-load ---------- */
+const autoLoaded = loadFromLocalStorage();
+if(autoLoaded){
+  applyStateToUI();
+  document.getElementById('chkRememberFields').checked = true;
+} else {
+  renderPurchases();
+  renderDeptSummary();
+  itemsData.forEach(it=>renderItemCalc(it.id));
+  recalcHeader();
 }
-
-/* ---------- initial render ---------- */
-tryRestoreFromLocalStorage();
-renderEmployees();
-renderTransactions();
-recalcTicker();
 </script>
 </body>
 </html>
