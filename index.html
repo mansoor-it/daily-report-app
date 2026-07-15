@@ -40,8 +40,6 @@
     font-family:'Cairo',sans-serif; font-size:24px; font-weight:800; letter-spacing:1px;
     color:var(--accent);
   }
-  .ticker .value.bad{color:#E8776A;}
-  .ticker .value.good{color:#8FBB74;}
 
   nav.tabs{display:flex; gap:4px; overflow-x:auto; padding-top:6px;}
   nav.tabs button{
@@ -78,11 +76,6 @@
   .field input[readonly]{background:#EFE7D6; color:var(--ink-soft); font-weight:700;}
   .field.wide{grid-column:1/-1;}
 
-  .subgroup{border:1px dashed var(--border); border-radius:10px; padding:14px; background:var(--surface-2);}
-  .subgroup h3{font-size:13.5px; margin-bottom:10px; color:var(--accent-dark);}
-  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-  @media (max-width:640px){ .two-col{grid-template-columns:1fr;} }
-
   table{width:100%; border-collapse:collapse; font-size:13.5px;}
   thead th{
     background:var(--surface-2); color:var(--ink-soft); font-weight:700; font-size:12px;
@@ -90,11 +83,10 @@
   }
   tbody td{padding:6px; border-bottom:1px solid var(--border); vertical-align:middle;}
   tbody tr.dept-row td{background:var(--accent-soft); font-family:'Cairo',sans-serif; font-weight:700; color:var(--accent-dark); font-size:12.5px;}
-  tbody td input{width:72px; padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2); font-size:13.5px;}
-  tbody td input.price-input{width:64px;}
+  tbody td input{width:66px; padding:6px 7px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2); font-size:13.5px;}
+  tbody td input.price-input{width:60px;}
   tbody td input.price-missing{border-color:var(--bad); background:var(--bad-soft);}
   tbody td.calc{font-weight:700;}
-  tbody td.calc.neg{color:var(--bad);}
   tbody td.calc.money{color:var(--accent-dark);}
   tfoot td{padding:8px 6px; font-family:'Cairo',sans-serif; font-weight:700; border-top:2px solid var(--ink);}
 
@@ -130,10 +122,6 @@
   .kpi{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px;}
   .kpi .label{font-size:12px; color:var(--ink-soft); margin-bottom:6px;}
   .kpi .value{font-family:'Cairo',sans-serif; font-size:20px; font-weight:800;}
-  .kpi.alert{border-color:var(--bad); background:var(--bad-soft);}
-  .kpi.alert .value{color:var(--bad);}
-  .kpi.ok{border-color:var(--good); background:var(--good-soft);}
-  .kpi.ok .value{color:var(--good);}
 
   .actions{display:flex; gap:10px; flex-wrap:wrap;}
   .btn{
@@ -183,7 +171,7 @@
       <h1>الجرد والتقرير اليومي</h1>
     </div>
     <div class="ticker">
-      <div class="label">فرق المبيعات (كاش + شبكة) عن صافي جرد الأقسام (بعد استبعاد كيتا وهنجر)</div>
+      <div class="label">إجمالي كل المبيعات (كاش + شبكة + كيتا + هنجر)</div>
       <div class="value" id="tickerValue">٠.٠٠ ريال</div>
     </div>
   </div>
@@ -193,10 +181,9 @@
       <button data-tab="items">جرد الأصناف</button>
       <button data-tab="attach">المرفقات والصور</button>
       <button data-tab="summary">الملخص والتصدير</button>
-        <button class="link-out" onclick="window.location.href='payroll-app.html'">نظام إدارة الحسابات والحركات المالية</button>
- 
-    
-      <button class="link-out" onclick="window.location.href=' pos-import.html'"> مقارنه الجرد    </button>
+      <button class="link-out" onclick="window.location.href='payroll-app.html'">نظام إدارة الحسابات والحركات المالية</button>
+      <button class="link-out" onclick="window.location.href='pos-import.html'">استيراد مبيعات الكاشير</button>
+      <button class="link-out" onclick="window.location.href='pos-vs-inventory.html'">مقارنة الجرد بالكاشير</button>
     </nav>
   </div>
 </header>
@@ -232,7 +219,7 @@
 
     <div class="card">
       <h2><span class="n">٢</span> الكاش والشبكة</h2>
-      <p class="hint">أدخل المبلغ المتوفر فعليًا في الصندوق بعد العد — يضيف النظام تلقائيًا المشتريات المدفوعة من الصندوق ليحسب إجمالي المبيعات كاش الحقيقي.</p>
+      <p class="hint">أدخل المبلغ المتوفر فعليًا في الصندوق بعد العد — يضيف النظام تلقائيًا المشتريات المدفوعة من الصندوق ليحسب إجمالي مبيعات الكاش الحقيقي.</p>
       <div class="grid">
         <div class="field"><label>المبلغ المتوفر في الصندوق</label><input type="number" id="f_cashAvailable" step="0.01"></div>
         <div class="field"><label>مبيعات الشبكة</label><input type="number" id="f_network" step="0.01"></div>
@@ -242,34 +229,28 @@
     </div>
 
     <div class="card">
-      <h2><span class="n">٣</span> كيتا وهنجر</h2>
-      <p class="hint">إجمالي المبلغ لكل تطبيق، مع عدد القطع المباعة من كل قسم رئيسي (للمطابقة مع الجرد).</p>
-      <div class="two-col">
-        <div class="subgroup">
-          <h3>كيتا</h3>
-          <div class="grid">
-            <div class="field wide"><label>إجمالي مبيعات كيتا (ريال)</label><input type="number" id="f_keetaTotal" step="0.01"></div>
-            <div class="field"><label>عدد الدجاج</label><input type="number" id="f_keetaChicken" step="1"></div>
-            <div class="field"><label>عدد المشروبات</label><input type="number" id="f_keetaDrinks" step="1"></div>
-            <div class="field"><label>عدد السلطات</label><input type="number" id="f_keetaSalads" step="1"></div>
-            <div class="field"><label>عدد الماء</label><input type="number" id="f_keetaWater" step="1"></div>
-          </div>
-        </div>
-        <div class="subgroup">
-          <h3>هنجر</h3>
-          <div class="grid">
-            <div class="field wide"><label>إجمالي مبيعات هنجر (ريال)</label><input type="number" id="f_hungerTotal" step="0.01"></div>
-            <div class="field"><label>عدد الدجاج</label><input type="number" id="f_hungerChicken" step="1"></div>
-            <div class="field"><label>عدد المشروبات</label><input type="number" id="f_hungerDrinks" step="1"></div>
-            <div class="field"><label>عدد السلطات</label><input type="number" id="f_hungerSalads" step="1"></div>
-            <div class="field"><label>عدد الماء</label><input type="number" id="f_hungerWater" step="1"></div>
-          </div>
-        </div>
+      <h2><span class="n">٣</span> كيتا</h2>
+      <div class="grid">
+        <div class="field wide"><label>إجمالي مبيعات كيتا (ريال)</label><input type="number" id="f_keetaTotal" step="0.01"></div>
       </div>
     </div>
 
     <div class="card">
-      <h2><span class="n">٤</span> المشتريات الجديدة (خرج الصندوق)</h2>
+      <h2><span class="n">٤</span> هنجر</h2>
+      <div class="grid">
+        <div class="field wide"><label>إجمالي مبيعات هنجر (ريال)</label><input type="number" id="f_hungerTotal" step="0.01"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">٥</span> الإجمالي الكلي</h2>
+      <div class="grid">
+        <div class="field wide"><label>إجمالي الكاش + الشبكة + كيتا + هنجر — تلقائي</label><input type="text" id="f_grandTotal" readonly></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">٦</span> المشتريات الجديدة (خرج الصندوق)</h2>
       <p class="hint">أضف كل مشترى باسمه وسعره — الإجمالي يُخصم من الصندوق ويُضاف تلقائيًا لحساب إجمالي مبيعات الكاش أعلاه.</p>
       <div id="purchasesList"></div>
       <div class="actions" style="margin-top:6px;">
@@ -279,8 +260,8 @@
     </div>
 
     <div class="card">
-      <h2><span class="n">٥</span> بيع آجل، مصروفات، وملاحظات</h2>
-      <p class="hint">بيع الآجل للتوثيق فقط ولا يدخل ضمن معادلة التسوية بين الكاش/الشبكة وجرد الأقسام.</p>
+      <h2><span class="n">٧</span> بيع آجل، مصروفات، وملاحظات</h2>
+      <p class="hint">بيع الآجل للتوثيق فقط ولا يدخل ضمن أي معادلة.</p>
       <div class="grid">
         <div class="field"><label>بيع آجل (توثيق فقط)</label><input type="number" id="f_credit" step="0.01"></div>
         <div class="field"><label>الاستلامات الخارجية</label><input type="number" id="f_external" step="0.01"></div>
@@ -294,11 +275,11 @@
   <section class="panel" id="panel-items">
     <div class="card">
       <h2><span class="n">١</span> تفاصيل الجرد حسب الصنف</h2>
-      <p class="hint">حدّد سعر كل صنف، ثم أدخل بداية / مشتريات / المتبقي / التوالف — يُحسب تلقائيًا: المبيعات (كمية) = بداية + مشتريات − متبقي − توالف، وقيمة المبيعات = الكمية × السعر، وخسارة التوالف = التوالف × السعر.</p>
+      <p class="hint">أدخل عدد القطع المباعة عبر كيتا وهنجر لكل صنف — تُستبعد تلقائيًا من "صافي الكمية" و"صافي القيمة" (بدون خصم من العهدة، للتوثيق والمطابقة فقط).</p>
       <div style="overflow-x:auto;">
         <table id="itemsTable">
           <thead>
-            <tr><th>الصنف</th><th>السعر</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>المبيعات (كمية)</th><th>قيمة المبيعات</th><th>خسارة التوالف</th></tr>
+            <tr><th>الصنف</th><th>السعر</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>كيتا</th><th>هنجر</th><th>المبيعات (كمية)</th><th>صافي الكمية</th><th>قيمة المبيعات</th><th>صافي القيمة</th><th>خسارة التوالف</th></tr>
           </thead>
           <tbody id="itemsBody"></tbody>
         </table>
@@ -309,7 +290,7 @@
       <h2><span class="n">٢</span> ملخص الجرد حسب القسم (تلقائي)</h2>
       <div style="overflow-x:auto;">
         <table id="deptTable">
-          <thead><tr><th>القسم</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>المبيعات (إجمالي كمية)</th><th>كيتا+هنجر (كمية)</th><th>صافي المبيعات (كمية)</th><th>صافي قيمة المبيعات</th><th>خسارة التوالف</th></tr></thead>
+          <thead><tr><th>القسم</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>كيتا</th><th>هنجر</th><th>مبيعات (كمية)</th><th>صافي كمية</th><th>قيمة المبيعات</th><th>صافي قيمة</th><th>خسارة التوالف</th></tr></thead>
           <tbody id="deptBody"></tbody>
           <tfoot><tr id="deptTotalRow"></tr></tfoot>
         </table>
@@ -359,7 +340,7 @@
       <h2><span class="n">١</span> ملخص الأقسام</h2>
       <div style="overflow-x:auto;">
         <table id="deptTableSummary">
-          <thead><tr><th>القسم</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>المبيعات (إجمالي كمية)</th><th>كيتا+هنجر (كمية)</th><th>صافي المبيعات (كمية)</th><th>صافي قيمة المبيعات</th><th>خسارة التوالف</th></tr></thead>
+          <thead><tr><th>القسم</th><th>بداية</th><th>مشتريات</th><th>المتبقي</th><th>توالف</th><th>كيتا</th><th>هنجر</th><th>مبيعات (كمية)</th><th>صافي كمية</th><th>قيمة المبيعات</th><th>صافي قيمة</th><th>خسارة التوالف</th></tr></thead>
           <tbody id="deptBodySummary"></tbody>
         </table>
       </div>
@@ -367,7 +348,7 @@
 
     <div class="card">
       <h2><span class="n">٢</span> تصدير التقرير</h2>
-      <p class="hint">Excel وPDF يشملان كل البيانات: الكاش والشبكة، كيتا وهنجر، المشتريات، جرد الأصناف بالأسعار، والتسوية النهائية.</p>
+      <p class="hint">Excel وPDF يشملان كل البيانات: الكاش والشبكة، كيتا، هنجر، الإجمالي الكلي، المشتريات، وجرد الأصناف بالأسعار.</p>
       <div class="actions">
         <button class="btn btn-primary" id="btnExcel">⬇ تصدير Excel</button>
         <button class="btn btn-primary" id="btnPdf">⬇ تصدير PDF</button>
@@ -409,7 +390,7 @@
 </div>
 
 <script>
-/* ============ item catalog: price, دep, name — price is editable per day, defaults 0 except salads ============ */
+/* ============ item catalog: price is editable per day, defaults 0 except salads ============ */
 const itemsData = [
   {id:'d_small', dept:'المشروبات', name:'مشروبات صغير', defPrice:0},
   {id:'d_1l',    dept:'المشروبات', name:'مشروبات 1 لتر', defPrice:0},
@@ -442,14 +423,13 @@ const state = {
   items:{},
   attachments:{purchases:[], external:[], keeta:[], hunger:[]}
 };
-itemsData.forEach(it => state.items[it.id] = {price:it.defPrice, beg:0, purch:0, remain:0, damaged:0});
+itemsData.forEach(it => state.items[it.id] = {price:it.defPrice, beg:0, purch:0, remain:0, damaged:0, keeta:0, hunger:0});
 state.header.purchasesList = [];
 
 const headerFieldIds = {
   date:'f_date', cashier:'f_cashier', prevFloat:'f_prevFloat', newFloat:'f_newFloat',
   cashAvailable:'f_cashAvailable', network:'f_network',
-  keetaTotal:'f_keetaTotal', keetaChicken:'f_keetaChicken', keetaDrinks:'f_keetaDrinks', keetaSalads:'f_keetaSalads', keetaWater:'f_keetaWater',
-  hungerTotal:'f_hungerTotal', hungerChicken:'f_hungerChicken', hungerDrinks:'f_hungerDrinks', hungerSalads:'f_hungerSalads', hungerWater:'f_hungerWater',
+  keetaTotal:'f_keetaTotal', hungerTotal:'f_hungerTotal',
   credit:'f_credit', external:'f_external', expenses:'f_expenses', notes:'f_notes'
 };
 
@@ -457,7 +437,7 @@ function num(v){ const n = parseFloat(v); return isNaN(n) ? 0 : n; }
 function fmt(n){ return n.toLocaleString('ar-SA', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 
 /* ---------- auto-save to localStorage (تذكرني) ---------- */
-const LS_KEY = 'inventoryAppState_v2';
+const LS_KEY = 'inventoryAppState_v3';
 function saveToLocalStorage(){
   try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){ /* ignore quota */ }
 }
@@ -479,7 +459,7 @@ function applyStateToUI(){
     document.getElementById(id).value = state.header[key] ?? '';
   });
   itemsData.forEach(it=>{
-    const v = state.items[it.id] || {price:it.defPrice, beg:0,purch:0,remain:0,damaged:0};
+    const v = state.items[it.id] || {price:it.defPrice, beg:0,purch:0,remain:0,damaged:0,keeta:0,hunger:0};
     state.items[it.id]=v;
     document.querySelectorAll(`input[data-id="${it.id}"]`).forEach(inp=>{ inp.value = v[inp.dataset.f]||0; });
     renderItemCalc(it.id);
@@ -527,20 +507,16 @@ function recalcHeader(){
   const cashNetworkTotal = cashSalesTotal + num(h.network);
   document.getElementById('f_cashNetworkTotal').value = fmt(cashNetworkTotal)+' ريال';
 
-  const deptRevenue = state._deptTotals ? state._deptTotals.netRevenue : 0;
-  const variance = cashNetworkTotal - deptRevenue;
-  const variancePct = deptRevenue !== 0 ? (variance/deptRevenue*100) : (cashNetworkTotal!==0 ? 100 : 0);
+  const grandTotal = cashNetworkTotal + num(h.keetaTotal) + num(h.hungerTotal);
+  document.getElementById('f_grandTotal').value = fmt(grandTotal)+' ريال';
 
   const ticker = document.getElementById('tickerValue');
-  ticker.textContent = fmt(variance)+' ريال ('+(variance>=0?'+':'')+variancePct.toFixed(1)+'٪)';
-  ticker.className='value';
-  ticker.classList.add(Math.abs(variancePct)<=3 ? 'good':'bad');
+  ticker.textContent = fmt(grandTotal)+' ريال';
 
   state._purchasesTotal = pTotal;
   state._cashSalesTotal = cashSalesTotal;
   state._cashNetworkTotal = cashNetworkTotal;
-  state._variance = variance;
-  state._variancePct = variancePct;
+  state._grandTotal = grandTotal;
 }
 
 /* ---------- purchases (itemized) ---------- */
@@ -587,7 +563,7 @@ let lastDept = null;
 itemsData.forEach(it=>{
   if(it.dept!==lastDept){
     const dr = document.createElement('tr'); dr.className='dept-row';
-    dr.innerHTML = `<td colspan="9">${it.dept}</td>`;
+    dr.innerHTML = `<td colspan="13">${it.dept}</td>`;
     itemsBody.appendChild(dr);
     lastDept = it.dept;
   }
@@ -599,8 +575,12 @@ itemsData.forEach(it=>{
     <td><input type="number" step="0.1" data-id="${it.id}" data-f="purch"></td>
     <td><input type="number" step="0.1" data-id="${it.id}" data-f="remain"></td>
     <td><input type="number" step="0.1" data-id="${it.id}" data-f="damaged"></td>
+    <td><input type="number" step="0.1" data-id="${it.id}" data-f="keeta"></td>
+    <td><input type="number" step="0.1" data-id="${it.id}" data-f="hunger"></td>
     <td class="calc" id="qty_${it.id}">٠.٠</td>
+    <td class="calc" id="netqty_${it.id}">٠.٠</td>
     <td class="calc money" id="rev_${it.id}">٠.٠٠</td>
+    <td class="calc money" id="netrev_${it.id}">٠.٠٠</td>
     <td class="calc money" id="loss_${it.id}">٠.٠٠</td>
   `;
   itemsBody.appendChild(tr);
@@ -615,59 +595,47 @@ itemsBody.querySelectorAll('input').forEach(inp=>{
   });
 });
 function itemSalesQty(v){ return num(v.beg)+num(v.purch)-num(v.remain)-num(v.damaged); }
+function itemNetQty(v){ return itemSalesQty(v)-num(v.keeta)-num(v.hunger); }
 function itemRevenue(v){ return itemSalesQty(v)*num(v.price); }
+function itemNetRevenue(v){ return itemNetQty(v)*num(v.price); }
 function itemLoss(v){ return num(v.damaged)*num(v.price); }
 function renderItemCalc(id){
   const v = state.items[id];
-  const qty = itemSalesQty(v);
-  const qtyCell = document.getElementById('qty_'+id);
-  qtyCell.textContent = qty.toFixed(1);
-  qtyCell.classList.toggle('neg', qty<0);
+  document.getElementById('qty_'+id).textContent = itemSalesQty(v).toFixed(1);
+  document.getElementById('netqty_'+id).textContent = itemNetQty(v).toFixed(1);
   document.getElementById('rev_'+id).textContent = fmt(itemRevenue(v));
+  document.getElementById('netrev_'+id).textContent = fmt(itemNetRevenue(v));
   document.getElementById('loss_'+id).textContent = fmt(itemLoss(v));
   const priceInput = itemsBody.querySelector(`input[data-id="${id}"][data-f="price"]`);
   if(priceInput) priceInput.classList.toggle('price-missing', num(v.price)===0);
 }
 
 /* ---------- department summary ---------- */
-/* كيتا وهنجر تُدخل كإجمالي لكل تصنيف (دجاج/مشروبات/سلطات/ماء) وليست مرتبطة بصنف محدد،
-   لذلك نطرحها على مستوى القسم فقط، وليس على مستوى الصنف الفردي */
-function deptAppQty(dept){
-  const h = state.header;
-  if(dept==='الدجاج')     return num(h.keetaChicken) + num(h.hungerChicken);
-  if(dept==='المشروبات')  return num(h.keetaDrinks)   + num(h.hungerDrinks);
-  if(dept==='السلطات')    return num(h.keetaSalads)   + num(h.hungerSalads);
-  if(dept==='الماء')      return num(h.keetaWater)    + num(h.hungerWater);
-  return 0; /* اللحوم والإيدامات: لا يوجد لهما تصنيف مقابل في كيتا/هنجر */
-}
 function computeDeptSummary(){
   return depts.map(dept=>{
     const rows = itemsData.filter(it=>it.dept===dept).map(it=>state.items[it.id]);
     const sum = (f)=> rows.reduce((a,v)=>a+num(v[f]),0);
-    const qty = rows.reduce((a,v)=>a+itemSalesQty(v),0);
-    const revenue = rows.reduce((a,v)=>a+itemRevenue(v),0);
-    const appQty = deptAppQty(dept);
-    const netQty = qty - appQty;
-    const avgPrice = qty !== 0 ? revenue/qty : 0;
-    const netRevenue = revenue - (appQty*avgPrice);
     return {
       dept,
       beg:sum('beg'), purch:sum('purch'), remain:sum('remain'), damaged:sum('damaged'),
-      qty, appQty, netQty, revenue, netRevenue,
+      keeta:sum('keeta'), hunger:sum('hunger'),
+      qty: rows.reduce((a,v)=>a+itemSalesQty(v),0),
+      netQty: rows.reduce((a,v)=>a+itemNetQty(v),0),
+      revenue: rows.reduce((a,v)=>a+itemRevenue(v),0),
+      netRevenue: rows.reduce((a,v)=>a+itemNetRevenue(v),0),
       loss: rows.reduce((a,v)=>a+itemLoss(v),0)
     };
   });
 }
 function renderDeptSummary(){
   const data = computeDeptSummary();
-  const rowsHtml = data.map(d=>`<tr><td>${d.dept}</td><td>${d.beg.toFixed(1)}</td><td>${d.purch.toFixed(1)}</td><td>${d.remain.toFixed(1)}</td><td>${d.damaged.toFixed(1)}</td><td>${d.qty.toFixed(1)}</td><td>${d.appQty.toFixed(1)}</td><td class="calc${d.netQty<0?' neg':''}">${d.netQty.toFixed(1)}</td><td class="calc money${d.netRevenue<0?' neg':''}">${fmt(d.netRevenue)}</td><td>${fmt(d.loss)}</td></tr>`).join('');
+  const rowsHtml = data.map(d=>`<tr><td>${d.dept}</td><td>${d.beg.toFixed(1)}</td><td>${d.purch.toFixed(1)}</td><td>${d.remain.toFixed(1)}</td><td>${d.damaged.toFixed(1)}</td><td>${d.keeta.toFixed(1)}</td><td>${d.hunger.toFixed(1)}</td><td>${d.qty.toFixed(1)}</td><td>${d.netQty.toFixed(1)}</td><td>${fmt(d.revenue)}</td><td>${fmt(d.netRevenue)}</td><td>${fmt(d.loss)}</td></tr>`).join('');
   document.getElementById('deptBody').innerHTML = rowsHtml;
   document.getElementById('deptBodySummary').innerHTML = rowsHtml;
-  const totals = data.reduce((a,d)=>({beg:a.beg+d.beg,purch:a.purch+d.purch,remain:a.remain+d.remain,damaged:a.damaged+d.damaged,qty:a.qty+d.qty,appQty:a.appQty+d.appQty,netQty:a.netQty+d.netQty,revenue:a.revenue+d.revenue,netRevenue:a.netRevenue+d.netRevenue,loss:a.loss+d.loss}),{beg:0,purch:0,remain:0,damaged:0,qty:0,appQty:0,netQty:0,revenue:0,netRevenue:0,loss:0});
-  document.getElementById('deptTotalRow').innerHTML = `<td>الإجمالي</td><td>${totals.beg.toFixed(1)}</td><td>${totals.purch.toFixed(1)}</td><td>${totals.remain.toFixed(1)}</td><td>${totals.damaged.toFixed(1)}</td><td>${totals.qty.toFixed(1)}</td><td>${totals.appQty.toFixed(1)}</td><td>${totals.netQty.toFixed(1)}</td><td>${fmt(totals.netRevenue)}</td><td>${fmt(totals.loss)}</td>`;
+  const totals = data.reduce((a,d)=>({beg:a.beg+d.beg,purch:a.purch+d.purch,remain:a.remain+d.remain,damaged:a.damaged+d.damaged,keeta:a.keeta+d.keeta,hunger:a.hunger+d.hunger,qty:a.qty+d.qty,netQty:a.netQty+d.netQty,revenue:a.revenue+d.revenue,netRevenue:a.netRevenue+d.netRevenue,loss:a.loss+d.loss}),{beg:0,purch:0,remain:0,damaged:0,keeta:0,hunger:0,qty:0,netQty:0,revenue:0,netRevenue:0,loss:0});
+  document.getElementById('deptTotalRow').innerHTML = `<td>الإجمالي</td><td>${totals.beg.toFixed(1)}</td><td>${totals.purch.toFixed(1)}</td><td>${totals.remain.toFixed(1)}</td><td>${totals.damaged.toFixed(1)}</td><td>${totals.keeta.toFixed(1)}</td><td>${totals.hunger.toFixed(1)}</td><td>${totals.qty.toFixed(1)}</td><td>${totals.netQty.toFixed(1)}</td><td>${fmt(totals.revenue)}</td><td>${fmt(totals.netRevenue)}</td><td>${fmt(totals.loss)}</td>`;
   state._deptSummary = data;
   state._deptTotals = totals;
-  recalcHeader();
 }
 
 /* ---------- attachments ---------- */
@@ -742,25 +710,19 @@ function renderSummary(){
   const h = state.header;
   const grossRevenue = state._deptTotals ? state._deptTotals.revenue : 0;
   const netRevenue = state._deptTotals ? state._deptTotals.netRevenue : 0;
-  const appQtyTotal = state._deptTotals ? state._deptTotals.appQty : 0;
   const deptLoss = state._deptTotals ? state._deptTotals.loss : 0;
-  const cashNetworkTotal = state._cashNetworkTotal || 0;
-  const variance = state._variance || 0;
-  const variancePct = state._variancePct || 0;
-  const allChannels = cashNetworkTotal + num(h.keetaTotal) + num(h.hungerTotal) + num(h.credit);
 
   const kpis = [
-    {label:'إجمالي مبيعات الأقسام (شامل كيتا وهنجر)', value: fmt(grossRevenue)+' ريال', cls:''},
-    {label:'كمية كيتا+هنجر المستبعدة من الجرد', value: appQtyTotal.toFixed(1)+' قطعة', cls:''},
-    {label:'صافي مبيعات الأقسام (بدون كيتا وهنجر)', value: fmt(netRevenue)+' ريال', cls:''},
-    {label:'إجمالي الكاش + الشبكة', value: fmt(cashNetworkTotal)+' ريال', cls:''},
-    {label:'الفرق (كاش+شبكة عن صافي الأقسام)', value: fmt(variance)+' ريال', cls: Math.abs(variancePct)<=3 ? 'ok':'alert'},
-    {label:'نسبة العجز / الزيادة', value: (variance>=0?'+':'')+variancePct.toFixed(1)+' ٪', cls: Math.abs(variancePct)<=3 ? 'ok':'alert'},
-    {label:'مسحوبات الصندوق (مشتريات اليوم)', value: fmt(state._purchasesTotal||0)+' ريال', cls:''},
-    {label:'خسارة التوالف الإجمالية', value: fmt(deptLoss)+' ريال', cls: deptLoss>0 ? 'alert':''},
-    {label:'إجمالي كل القنوات (كاش+شبكة+كيتا+هنجر+آجل)', value: fmt(allChannels)+' ريال', cls:''},
+    {label:'إجمالي الكاش + الشبكة', value: fmt(state._cashNetworkTotal||0)+' ريال'},
+    {label:'إجمالي مبيعات كيتا', value: fmt(num(h.keetaTotal))+' ريال'},
+    {label:'إجمالي مبيعات هنجر', value: fmt(num(h.hungerTotal))+' ريال'},
+    {label:'الإجمالي الكلي (كاش+شبكة+كيتا+هنجر)', value: fmt(state._grandTotal||0)+' ريال'},
+    {label:'مسحوبات الصندوق (مشتريات اليوم)', value: fmt(state._purchasesTotal||0)+' ريال'},
+    {label:'إجمالي مبيعات الأقسام (شامل كيتا وهنجر)', value: fmt(grossRevenue)+' ريال'},
+    {label:'صافي مبيعات الأقسام (بدون كيتا وهنجر)', value: fmt(netRevenue)+' ريال'},
+    {label:'خسارة التوالف الإجمالية', value: fmt(deptLoss)+' ريال'},
   ];
-  document.getElementById('kpis').innerHTML = kpis.map(k=>`<div class="kpi ${k.cls}"><div class="label">${k.label}</div><div class="value">${k.value}</div></div>`).join('');
+  document.getElementById('kpis').innerHTML = kpis.map(k=>`<div class="kpi"><div class="label">${k.label}</div><div class="value">${k.value}</div></div>`).join('');
 }
 
 /* ---------- export excel ---------- */
@@ -776,20 +738,16 @@ document.getElementById('btnExcel').addEventListener('click', ()=>{
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(creditRows), 'معلومات النظام');
 
   renderDeptSummary();
-  const deptRevenue = state._deptTotals.revenue;
   const headerRows = [
     ['التاريخ', h.date||''], ['اسم الكاشير', h.cashier||''],
     ['العهدة السابقة (توثيق فقط)', num(h.prevFloat)], ['العهدة الجديدة (توثيق فقط)', num(h.newFloat)],
     ['المبلغ المتوفر في الصندوق', num(h.cashAvailable)], ['إجمالي المشتريات (يُضاف للكاش)', state._purchasesTotal||0],
     ['إجمالي مبيعات الكاش', state._cashSalesTotal||0], ['مبيعات الشبكة', num(h.network)],
     ['إجمالي الكاش + الشبكة', state._cashNetworkTotal||0],
-    ['كيتا - إجمالي المبلغ', num(h.keetaTotal)], ['كيتا - عدد الدجاج', num(h.keetaChicken)], ['كيتا - عدد المشروبات', num(h.keetaDrinks)], ['كيتا - عدد السلطات', num(h.keetaSalads)], ['كيتا - عدد الماء', num(h.keetaWater)],
-    ['هنجر - إجمالي المبلغ', num(h.hungerTotal)], ['هنجر - عدد الدجاج', num(h.hungerChicken)], ['هنجر - عدد المشروبات', num(h.hungerDrinks)], ['هنجر - عدد السلطات', num(h.hungerSalads)], ['هنجر - عدد الماء', num(h.hungerWater)],
+    ['إجمالي مبيعات كيتا', num(h.keetaTotal)], ['إجمالي مبيعات هنجر', num(h.hungerTotal)],
+    ['الإجمالي الكلي (كاش+شبكة+كيتا+هنجر)', state._grandTotal||0],
     ['بيع آجل (توثيق فقط)', num(h.credit)],
     ['الاستلامات الخارجية', num(h.external)], ['المصروفات', num(h.expenses)],
-    ['إجمالي مبيعات الأقسام (من الجرد)', deptRevenue],
-    ['الفرق (كاش+شبكة عن جرد الأقسام)', state._variance||0],
-    ['نسبة العجز/الزيادة %', Number((state._variancePct||0).toFixed(2))],
     ['ملاحظات', h.notes||'']
   ];
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(headerRows), 'التقرير اليومي');
@@ -799,11 +757,12 @@ document.getElementById('btnExcel').addEventListener('click', ()=>{
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(purchaseRows), 'المشتريات');
 
   const deptData = state._deptSummary;
-  const deptRows = [['القسم','بداية','مشتريات','المتبقي','توالف','المبيعات (كمية)','قيمة المبيعات','خسارة التوالف'], ...deptData.map(d=>[d.dept,d.beg,d.purch,d.remain,d.damaged,d.qty,d.revenue,d.loss])];
+  const deptRows = [['القسم','بداية','مشتريات','المتبقي','توالف','كيتا','هنجر','المبيعات (كمية)','صافي كمية','قيمة المبيعات','صافي قيمة','خسارة التوالف'],
+    ...deptData.map(d=>[d.dept,d.beg,d.purch,d.remain,d.damaged,d.keeta,d.hunger,d.qty,d.netQty,d.revenue,d.netRevenue,d.loss])];
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(deptRows), 'ملخص الأقسام');
 
-  const itemRows = [['القسم','الصنف','السعر','بداية','مشتريات','المتبقي','توالف','المبيعات (كمية)','قيمة المبيعات','خسارة التوالف'],
-    ...itemsData.map(it=>{const v=state.items[it.id]; return [it.dept,it.name,num(v.price),v.beg,v.purch,v.remain,v.damaged,itemSalesQty(v),itemRevenue(v),itemLoss(v)];})];
+  const itemRows = [['القسم','الصنف','السعر','بداية','مشتريات','المتبقي','توالف','كيتا','هنجر','المبيعات (كمية)','صافي كمية','قيمة المبيعات','صافي قيمة','خسارة التوالف'],
+    ...itemsData.map(it=>{const v=state.items[it.id]; return [it.dept,it.name,num(v.price),v.beg,v.purch,v.remain,v.damaged,num(v.keeta),num(v.hunger),itemSalesQty(v),itemNetQty(v),itemRevenue(v),itemNetRevenue(v),itemLoss(v)];})];
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(itemRows), 'تفاصيل الأصناف');
 
   const attRows = [['القسم','اسم الملف','ملاحظة']];
@@ -825,7 +784,7 @@ document.getElementById('btnPdf').addEventListener('click', async ()=>{
     hideWrap = document.createElement('div');
     hideWrap.style.cssText = 'height:0; overflow:hidden;';
     const container = document.createElement('div');
-    container.style.cssText = 'width:680px; background:#fff; padding:24px; font-family:Tajawal,sans-serif; direction:rtl; color:#222;';
+    container.style.cssText = 'width:700px; background:#fff; padding:24px; font-family:Tajawal,sans-serif; direction:rtl; color:#222;';
     container.innerHTML = buildPrintHTML();
     hideWrap.appendChild(container);
     document.body.appendChild(hideWrap);
@@ -868,7 +827,7 @@ document.getElementById('btnPdf').addEventListener('click', async ()=>{
 function buildPrintHTML(){
   const h = state.header;
   const deptData = state._deptSummary || computeDeptSummary();
-  const tableStyle = 'width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px;';
+  const tableStyle = 'width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:16px;';
   const th = 'style="border:1px solid #ccc;padding:4px;background:#f2ede2;text-align:right;"';
   const td = 'style="border:1px solid #ccc;padding:4px;text-align:right;"';
 
@@ -890,14 +849,9 @@ function buildPrintHTML(){
     <tr><td ${td}>المتوفر بالصندوق</td><td ${td}>${fmt(num(h.cashAvailable))}</td><td ${td}>إجمالي المشتريات</td><td ${td}>${fmt(state._purchasesTotal||0)}</td></tr>
     <tr><td ${td}>إجمالي مبيعات الكاش</td><td ${td}>${fmt(state._cashSalesTotal||0)}</td><td ${td}>مبيعات الشبكة</td><td ${td}>${fmt(num(h.network))}</td></tr>
     <tr><td ${td}><b>إجمالي الكاش + الشبكة</b></td><td ${td}><b>${fmt(state._cashNetworkTotal||0)}</b></td><td ${td}>المصروفات</td><td ${td}>${fmt(num(h.expenses))}</td></tr>
-    <tr><td ${td}>كيتا (إجمالي)</td><td ${td}>${fmt(num(h.keetaTotal))}</td><td ${td}>هنجر (إجمالي)</td><td ${td}>${fmt(num(h.hungerTotal))}</td></tr>
-    <tr><td ${td}>بيع آجل (توثيق)</td><td ${td}>${fmt(num(h.credit))}</td><td ${td}>العهدة سابقة/جديدة (توثيق)</td><td ${td}>${fmt(num(h.prevFloat))} / ${fmt(num(h.newFloat))}</td></tr>
-  </table>
-
-  <h3 style="font-size:14px;margin:14px 0 6px;">كيتا وهنجر — تفصيل الكميات</h3>
-  <table style="${tableStyle}"><tr><th ${th}>التطبيق</th><th ${th}>دجاج</th><th ${th}>مشروبات</th><th ${th}>سلطات</th><th ${th}>ماء</th></tr>
-    <tr><td ${td}>كيتا</td><td ${td}>${num(h.keetaChicken)}</td><td ${td}>${num(h.keetaDrinks)}</td><td ${td}>${num(h.keetaSalads)}</td><td ${td}>${num(h.keetaWater)}</td></tr>
-    <tr><td ${td}>هنجر</td><td ${td}>${num(h.hungerChicken)}</td><td ${td}>${num(h.hungerDrinks)}</td><td ${td}>${num(h.hungerSalads)}</td><td ${td}>${num(h.hungerWater)}</td></tr>
+    <tr><td ${td}>إجمالي كيتا</td><td ${td}>${fmt(num(h.keetaTotal))}</td><td ${td}>إجمالي هنجر</td><td ${td}>${fmt(num(h.hungerTotal))}</td></tr>
+    <tr><td ${td}><b>الإجمالي الكلي (كاش+شبكة+كيتا+هنجر)</b></td><td ${td}><b>${fmt(state._grandTotal||0)}</b></td><td ${td}>بيع آجل (توثيق)</td><td ${td}>${fmt(num(h.credit))}</td></tr>
+    <tr><td ${td}>العهدة سابقة/جديدة (توثيق)</td><td ${td}>${fmt(num(h.prevFloat))} / ${fmt(num(h.newFloat))}</td><td ${td}></td><td ${td}></td></tr>
   </table>
 
   <p style="font-size:12px;"><b>ملاحظات:</b> ${(h.notes||'').replace(/</g,'&lt;')}</p>
@@ -908,21 +862,13 @@ function buildPrintHTML(){
   </table>
 
   <h3 style="font-size:14px;margin:14px 0 6px;">ملخص الأقسام</h3>
-  <table style="${tableStyle}"><tr><th ${th}>القسم</th><th ${th}>بداية</th><th ${th}>مشتريات</th><th ${th}>المتبقي</th><th ${th}>توالف</th><th ${th}>كمية</th><th ${th}>قيمة المبيعات</th><th ${th}>خسارة التوالف</th></tr>
-  ${deptData.map(d=>`<tr><td ${td}>${d.dept}</td><td ${td}>${d.beg.toFixed(1)}</td><td ${td}>${d.purch.toFixed(1)}</td><td ${td}>${d.remain.toFixed(1)}</td><td ${td}>${d.damaged.toFixed(1)}</td><td ${td}>${d.qty.toFixed(1)}</td><td ${td}>${fmt(d.revenue)}</td><td ${td}>${fmt(d.loss)}</td></tr>`).join('')}
+  <table style="${tableStyle}"><tr><th ${th}>القسم</th><th ${th}>بداية</th><th ${th}>مشتريات</th><th ${th}>متبقي</th><th ${th}>توالف</th><th ${th}>كيتا</th><th ${th}>هنجر</th><th ${th}>كمية</th><th ${th}>صافي كمية</th><th ${th}>قيمة المبيعات</th><th ${th}>صافي قيمة</th><th ${th}>خسارة</th></tr>
+  ${deptData.map(d=>`<tr><td ${td}>${d.dept}</td><td ${td}>${d.beg.toFixed(1)}</td><td ${td}>${d.purch.toFixed(1)}</td><td ${td}>${d.remain.toFixed(1)}</td><td ${td}>${d.damaged.toFixed(1)}</td><td ${td}>${d.keeta.toFixed(1)}</td><td ${td}>${d.hunger.toFixed(1)}</td><td ${td}>${d.qty.toFixed(1)}</td><td ${td}>${d.netQty.toFixed(1)}</td><td ${td}>${fmt(d.revenue)}</td><td ${td}>${fmt(d.netRevenue)}</td><td ${td}>${fmt(d.loss)}</td></tr>`).join('')}
   </table>
 
   <h3 style="font-size:14px;margin:14px 0 6px;">تفاصيل الأصناف</h3>
-  <table style="${tableStyle}"><tr><th ${th}>القسم</th><th ${th}>الصنف</th><th ${th}>السعر</th><th ${th}>بداية</th><th ${th}>مشتريات</th><th ${th}>المتبقي</th><th ${th}>توالف</th><th ${th}>كمية</th><th ${th}>قيمة المبيعات</th><th ${th}>خسارة التوالف</th></tr>
-  ${itemsData.map(it=>{const v=state.items[it.id]; return `<tr><td ${td}>${it.dept}</td><td ${td}>${it.name}</td><td ${td}>${fmt(num(v.price))}</td><td ${td}>${v.beg}</td><td ${td}>${v.purch}</td><td ${td}>${v.remain}</td><td ${td}>${v.damaged}</td><td ${td}>${itemSalesQty(v).toFixed(1)}</td><td ${td}>${fmt(itemRevenue(v))}</td><td ${td}>${fmt(itemLoss(v))}</td></tr>`;}).join('')}
-  </table>
-
-  <h3 style="font-size:14px;margin:14px 0 6px;">التسوية النهائية</h3>
-  <table style="${tableStyle}">
-    <tr><td ${td}>إجمالي مبيعات الأقسام (من الجرد)</td><td ${td}><b>${fmt(state._deptTotals?state._deptTotals.revenue:0)}</b></td></tr>
-    <tr><td ${td}>إجمالي الكاش + الشبكة</td><td ${td}><b>${fmt(state._cashNetworkTotal||0)}</b></td></tr>
-    <tr><td ${td}>الفرق</td><td ${td}><b>${fmt(state._variance||0)}</b></td></tr>
-    <tr><td ${td}>نسبة العجز/الزيادة</td><td ${td}><b>${(state._variance>=0?'+':'')}${(state._variancePct||0).toFixed(1)}٪</b></td></tr>
+  <table style="${tableStyle}"><tr><th ${th}>القسم</th><th ${th}>الصنف</th><th ${th}>السعر</th><th ${th}>بداية</th><th ${th}>مشتريات</th><th ${th}>متبقي</th><th ${th}>توالف</th><th ${th}>كيتا</th><th ${th}>هنجر</th><th ${th}>كمية</th><th ${th}>صافي كمية</th><th ${th}>قيمة</th><th ${th}>صافي قيمة</th></tr>
+  ${itemsData.map(it=>{const v=state.items[it.id]; return `<tr><td ${td}>${it.dept}</td><td ${td}>${it.name}</td><td ${td}>${fmt(num(v.price))}</td><td ${td}>${v.beg}</td><td ${td}>${v.purch}</td><td ${td}>${v.remain}</td><td ${td}>${v.damaged}</td><td ${td}>${num(v.keeta)}</td><td ${td}>${num(v.hunger)}</td><td ${td}>${itemSalesQty(v).toFixed(1)}</td><td ${td}>${itemNetQty(v).toFixed(1)}</td><td ${td}>${fmt(itemRevenue(v))}</td><td ${td}>${fmt(itemNetRevenue(v))}</td></tr>`;}).join('')}
   </table>`;
 
   attCats.forEach(cat=>{
@@ -978,8 +924,7 @@ const excelLabelMap = {
   'التاريخ':'date', 'اسم الكاشير':'cashier',
   'العهدة السابقة (توثيق فقط)':'prevFloat', 'العهدة الجديدة (توثيق فقط)':'newFloat',
   'المبلغ المتوفر في الصندوق':'cashAvailable', 'مبيعات الشبكة':'network',
-  'كيتا - إجمالي المبلغ':'keetaTotal', 'كيتا - عدد الدجاج':'keetaChicken', 'كيتا - عدد المشروبات':'keetaDrinks', 'كيتا - عدد السلطات':'keetaSalads', 'كيتا - عدد الماء':'keetaWater',
-  'هنجر - إجمالي المبلغ':'hungerTotal', 'هنجر - عدد الدجاج':'hungerChicken', 'هنجر - عدد المشروبات':'hungerDrinks', 'هنجر - عدد السلطات':'hungerSalads', 'هنجر - عدد الماء':'hungerWater',
+  'إجمالي مبيعات كيتا':'keetaTotal', 'إجمالي مبيعات هنجر':'hungerTotal',
   'بيع آجل (توثيق فقط)':'credit', 'الاستلامات الخارجية':'external', 'المصروفات':'expenses', 'ملاحظات':'notes'
 };
 function excelDateToStr(v){
@@ -1013,12 +958,12 @@ function parseOwnFormatWorkbook(wb){
   }
 
   const newItems = {};
-  itemsData.forEach(it=> newItems[it.id] = {price:it.defPrice, beg:0,purch:0,remain:0,damaged:0});
+  itemsData.forEach(it=> newItems[it.id] = {price:it.defPrice, beg:0,purch:0,remain:0,damaged:0,keeta:0,hunger:0});
   const itemsSheet = wb.Sheets['تفاصيل الأصناف'];
   if(itemsSheet){
     XLSX.utils.sheet_to_json(itemsSheet, {header:1}).slice(1).forEach(r=>{
       const match = findItemMatch(r[0], r[1]);
-      if(match) newItems[match.id] = {price:num(r[2]), beg:num(r[3]), purch:num(r[4]), remain:num(r[5]), damaged:num(r[6])};
+      if(match) newItems[match.id] = {price:num(r[2]), beg:num(r[3]), purch:num(r[4]), remain:num(r[5]), damaged:num(r[6]), keeta:num(r[7]), hunger:num(r[8])};
     });
   }
 
@@ -1071,14 +1016,13 @@ document.getElementById('btnNextDay').addEventListener('click', ()=>{
   itemsData.forEach(it=>{
     const carriedBeg = num(state.items[it.id].remain);
     const keepPrice = num(state.items[it.id].price);
-    state.items[it.id] = {price:keepPrice, beg:carriedBeg, purch:0, remain:0, damaged:0};
+    state.items[it.id] = {price:keepPrice, beg:carriedBeg, purch:0, remain:0, damaged:0, keeta:0, hunger:0};
   });
 
   state.header = {
     date: nextDate, cashier: cashierName, prevFloat: newPrevFloat, newFloat:'',
     cashAvailable:'', network:'',
-    keetaTotal:'', keetaChicken:'', keetaDrinks:'', keetaSalads:'', keetaWater:'',
-    hungerTotal:'', hungerChicken:'', hungerDrinks:'', hungerSalads:'', hungerWater:'',
+    keetaTotal:'', hungerTotal:'',
     credit:'', external:'', expenses:'', notes:'', purchasesList: []
   };
   state.attachments = {purchases:[], external:[], keeta:[], hunger:[]};
