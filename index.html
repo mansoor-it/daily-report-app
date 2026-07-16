@@ -20,7 +20,7 @@
   *{box-sizing:border-box;}
   body{
     margin:0; background:var(--bg); color:var(--ink);
-    font-family:'Tajawal',sans-serif; font-size:15px; line-height:1.6;
+    font-family:'Tajawal',sans-serif; font-size:16px; line-height:1.6;
     padding-bottom:60px;
   }
   h1,h2,h3{font-family:'Cairo',sans-serif; margin:0; font-weight:700;}
@@ -58,27 +58,27 @@
     background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
     padding:18px; margin-bottom:16px;
   }
-  .card h2{font-size:16px; margin-bottom:14px; display:flex; align-items:center; gap:8px;}
+  .card h2{font-size:17px; margin-bottom:14px; display:flex; align-items:center; gap:8px;}
   .card h2 .n{
     display:inline-flex; align-items:center; justify-content:center;
     width:22px; height:22px; border-radius:50%; background:var(--accent-soft); color:var(--accent-dark);
     font-size:12px; font-weight:800;
   }
-  .card p.hint{color:var(--ink-soft); font-size:13px; margin:-8px 0 14px;}
+  .card p.hint{color:var(--ink-soft); font-size:13.5px; margin:-8px 0 14px;}
 
   .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px;}
-  .field label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px;}
+  .field label{display:block; font-size:13px; color:var(--ink-soft); margin-bottom:5px; font-weight:500;}
   .field input, .field textarea, .field select{
-    width:100%; padding:9px 10px; border:1px solid var(--border); border-radius:8px;
-    background:var(--surface-2); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:14.5px;
+    width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:'Tajawal',sans-serif; font-size:15px;
   }
   .field input:focus, .field textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
   .field input[readonly]{background:#EFE7D6; color:var(--ink-soft); font-weight:700;}
   .field.wide{grid-column:1/-1;}
 
-  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  table{width:100%; border-collapse:collapse; font-size:14px;}
   thead th{
-    background:var(--surface-2); color:var(--ink-soft); font-weight:700; font-size:12px;
+    background:var(--surface-2); color:var(--ink-soft); font-weight:700; font-size:12.5px;
     text-align:right; padding:8px 6px; border-bottom:1px solid var(--border); white-space:nowrap;
   }
   tbody td{padding:6px; border-bottom:1px solid var(--border); vertical-align:middle;}
@@ -103,8 +103,13 @@
   .thumb{position:relative; width:180px;}
   .thumb img{width:180px; height:180px; object-fit:cover; border-radius:8px; border:1px solid var(--border);}
   .thumb button{
-    position:absolute; top:-7px; left:-7px; width:28px; height:28px; border-radius:50%;
-    background:var(--bad); color:#fff; border:none; font-size:16px; cursor:pointer; line-height:1;
+    position:absolute; top:-8px; left:-8px; width:32px; height:32px; border-radius:50%;
+    background:var(--bad); color:#fff; border:none; font-size:18px; cursor:pointer; line-height:1;
+    box-shadow:0 2px 4px rgba(0,0,0,0.2); transition:transform 0.2s;
+  }
+  .thumb button:hover{
+    transform:scale(1.1);
+    background:#7A2A20;
   }
   .thumb input{width:180px; font-size:11.5px; margin-top:4px; padding:5px; border:1px solid var(--border); border-radius:5px;}
 
@@ -114,18 +119,23 @@
   .purchase-row input.p-price{width:110px;}
   .purchase-row input.p-note{flex:2; min-width:120px;}
   .purchase-row button{
-    width:26px; height:26px; border-radius:50%; border:none; background:var(--bad); color:#fff;
-    cursor:pointer; font-size:13px; flex-shrink:0;
+    width:30px; height:30px; border-radius:50%; border:none; background:var(--bad); color:#fff;
+    cursor:pointer; font-size:16px; flex-shrink:0; font-weight:bold;
+    box-shadow:0 2px 4px rgba(0,0,0,0.2); transition:transform 0.2s;
+  }
+  .purchase-row button:hover{
+    transform:scale(1.1);
+    background:#7A2A20;
   }
 
   .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:16px;}
   .kpi{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px;}
-  .kpi .label{font-size:12px; color:var(--ink-soft); margin-bottom:6px;}
-  .kpi .value{font-family:'Cairo',sans-serif; font-size:20px; font-weight:800;}
+  .kpi .label{font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;}
+  .kpi .value{font-family:'Cairo',sans-serif; font-size:22px; font-weight:800;}
 
   .actions{display:flex; gap:10px; flex-wrap:wrap;}
   .btn{
-    font-family:'Cairo',sans-serif; font-weight:700; font-size:14px; border-radius:9px; padding:11px 18px;
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:14.5px; border-radius:9px; padding:11px 18px;
     border:1px solid transparent; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
   }
   .btn-primary{background:var(--accent); color:#fff;}
@@ -535,7 +545,8 @@ function renderPurchases(){
   });
   wrap.querySelectorAll('input').forEach(inp=>{
     inp.addEventListener('input', ()=>{
-      const idx = inp.dataset.idx, f = inp.dataset.f;
+      const idx = parseInt(inp.dataset.idx, 10);
+      const f = inp.dataset.f;
       state.header.purchasesList[idx][f] = inp.value;
       recalcHeader();
       maybeAutosave();
@@ -543,7 +554,8 @@ function renderPurchases(){
   });
   wrap.querySelectorAll('button').forEach(b=>{
     b.addEventListener('click', ()=>{
-      state.header.purchasesList.splice(b.dataset.idx,1);
+      const idx = parseInt(b.dataset.idx, 10);
+      state.header.purchasesList.splice(idx, 1);
       renderPurchases();
       recalcHeader();
       maybeAutosave();
@@ -691,14 +703,16 @@ function renderThumbs(catKey){
   });
   wrap.querySelectorAll('button').forEach(b=>{
     b.addEventListener('click', ()=>{
-      state.attachments[b.dataset.cat].splice(b.dataset.idx,1);
+      const idx = parseInt(b.dataset.idx, 10);
+      state.attachments[b.dataset.cat].splice(idx, 1);
       renderThumbs(b.dataset.cat);
       maybeAutosave();
     });
   });
   wrap.querySelectorAll('input[type=text]').forEach(i=>{
     i.addEventListener('input', ()=>{
-      state.attachments[i.dataset.cat][i.dataset.idx].note = i.value;
+      const idx = parseInt(i.dataset.idx, 10);
+      state.attachments[i.dataset.cat][idx].note = i.value;
       maybeAutosave();
     });
   });

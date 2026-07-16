@@ -56,7 +56,6 @@
   thead th{background:var(--surface-2); color:var(--ink-soft); font-weight:700; font-size:12px; text-align:right; padding:8px 6px; border-bottom:1px solid var(--border); white-space:nowrap;}
   tbody td{padding:7px 6px; border-bottom:1px solid var(--border); vertical-align:middle;}
   tfoot td{padding:8px 6px; font-family:'Cairo',sans-serif; font-weight:700; border-top:2px solid var(--ink);}
-  tr.dept-row td{background:var(--accent-soft); font-family:'Cairo',sans-serif; font-weight:700; color:var(--accent-dark); font-size:12.5px;}
   tr.diff-row td{background:var(--bad-soft); color:var(--bad); font-weight:700;}
   td.diff-cell{font-family:'Cairo',sans-serif; font-weight:800;}
   td.diff-cell.bad{color:var(--bad);}
@@ -116,8 +115,6 @@
       <button class="link-out" onclick="window.location.href='pos-import.html'">استيراد مبيعات الكاشير</button>
       <button class="link-out" onclick="window.location.href='pos-vs-inventory.html'">مقارنة الأقسام (كيتا/هنجر)</button>
       <button class="link-out" onclick="window.location.href='payroll-app.html'">إدارة الحسابات والرواتب</button>
-   <button class="link-out" onclick="window.location.href='index.html'"> الرئيسي   </button>
- 
     </nav>
   </div>
 </header>
@@ -216,7 +213,6 @@
 function num(v){ const n = parseFloat(v); return isNaN(n) ? 0 : n; }
 function fmt(n){ return n.toLocaleString('ar-SA', {minimumFractionDigits:1, maximumFractionDigits:2}); }
 
-/* ============ inventory-side item catalog (matches index.html exactly) ============ */
 const itemsData = [
   {id:'d_small', dept:'المشروبات', name:'مشروبات صغير'},
   {id:'d_1l',    dept:'المشروبات', name:'مشروبات 1 لتر'},
@@ -238,7 +234,6 @@ const itemsData = [
 ];
 function itemSalesQty(v){ return num(v.beg)+num(v.purch)-num(v.remain)-num(v.damaged); }
 
-/* comparison buckets: bucket-key -> readable label + how it aggregates from inventory items */
 const BUCKETS = [
   {key:'c_grill',  label:'دجاج شواية',        invIds:['c_grill']},
   {key:'c_madh',   label:'دجاج مضغوط',        invIds:['c_madh']},
@@ -258,9 +253,6 @@ const BUCKETS = [
   {key:'s_p3',     label:'سلطات سعر 3 ريال',  invIds:['s_p3']},
 ];
 
-/* ============ POS-side classification + unit conversion ============ */
-/* ربع -> ×0.25 ، نص/نصف -> ×0.5 ، حبة/بدون كلمة حصة -> ×1
-   ثم تُجمع كل الحصص ضمن نفس "الشواية" أو "المضغوط" كوحدة واحدة مكافئة */
 function classifyPOSRow(name, qty, sales){
   const n = String(name||'');
   let frac = 1;
@@ -279,7 +271,7 @@ function classifyPOSRow(name, qty, sales){
   if(n.includes('شوايه') || n.includes('شواية')) return {bucket:'c_grill', qty: qty*frac};
   if(n.includes('مضغوط') || n.includes('مظغوط')){
     if(n.includes('دجاج')) return {bucket:'c_madh', qty: qty*frac};
-    return {bucket:null, qty:0}; /* e.g. رز مضغوط: ليس دجاجًا، يُستبعد */
+    return {bucket:null, qty:0};
   }
   if(n.includes('مشروبات')){
     if(n.includes('2 لتر') || n.includes('٢ لتر')) return {bucket:'d_2l', qty};
@@ -292,7 +284,7 @@ function classifyPOSRow(name, qty, sales){
     const bucket = Math.abs(unitPrice-3) <= Math.abs(unitPrice-2) ? 's_p3' : 's_p2';
     return {bucket, qty};
   }
-  return {bucket:null, qty:0}; /* رز، زبادي، أصناف غير مصنفة: مستبعدة لعدم وجود مقابل في الجرد */
+  return {bucket:null, qty:0};
 }
 
 const MONTHS = {Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
@@ -316,10 +308,8 @@ function excelDateToStr(v){
   return String(v);
 }
 
-/* ============ state ============ */
 const state = { inv:null, pos:null };
 
-/* ---------- inventory Excel import ---------- */
 function parseInventoryExcel(wb){
   const reportSheet = wb.Sheets['التقرير اليومي'];
   const itemsSheet = wb.Sheets['تفاصيل الأصناف'];
@@ -329,16 +319,24 @@ function parseInventoryExcel(wb){
     if(r[0]==='التاريخ') date = excelDateToStr(r[1]);
   });
   if(!date) return null;
-  const items = {};
-  itemsData.forEach(it=> items[it.id] = {beg:0, purch:0, remain:0, damaged:0});
-  XLSX.utils.sheet_to_json(itemsSheet, {header:1}).slice(1).forEach(r=>{
-    const dept = r[0], name = r[1];
-    const match = itemsData.find(it=> it.dept===String(dept||'').trim() && it.name===String(name||'').trim());
-    if(match) items[match.id] = {beg:num(r[3]), purch:num(r[4]), remain:num(r[5]), damaged:num(r[6])};
+
+  const itemRows = XLSX.utils.sheet_to_json(itemsSheet, {header:1});
+  const head = itemRows[0] || [];
+  const colDept = head.indexOf('القسم');
+  const colName = head.indexOf('الصنف');
+  const colQty  = head.indexOf('المبيعات (كمية)');
+  if(colDept<0 || colName<0 || colQty<0) return null;
+
+  const qtyByItemId = {};
+  itemsData.forEach(it=> qtyByItemId[it.id] = 0);
+  itemRows.slice(1).forEach(r=>{
+    const match = itemsData.find(it=> it.dept===String(r[colDept]||'').trim() && it.name===String(r[colName]||'').trim());
+    if(match) qtyByItemId[match.id] = num(r[colQty]);
   });
+
   const invQtyByBucket = {};
   BUCKETS.forEach(b=>{
-    invQtyByBucket[b.key] = b.invIds.reduce((a,id)=>a+itemSalesQty(items[id]),0);
+    invQtyByBucket[b.key] = b.invIds.reduce((a,id)=>a+qtyByItemId[id],0);
   });
   return {date, invQtyByBucket};
 }
@@ -368,7 +366,6 @@ function handleInvFile(file){
   reader.readAsArrayBuffer(file);
 }
 
-/* ---------- POS Excel import ---------- */
 const posDropzone = document.getElementById('posDropzone');
 const posInput = document.getElementById('posInput');
 posDropzone.addEventListener('click', ()=> posInput.click());
@@ -418,7 +415,6 @@ function handlePosFile(file){
   reader.readAsArrayBuffer(file);
 }
 
-/* ---------- comparison rendering ---------- */
 document.getElementById('tolQty').addEventListener('input', renderCompare);
 function renderCompare(){
   const tbody = document.getElementById('compareBody');
@@ -475,7 +471,6 @@ function renderCompare(){
   state._compareTotals = totals;
 }
 
-/* ---------- export excel ---------- */
 document.getElementById('btnExcel').addEventListener('click', ()=>{
   if(!state._compareRows){ alert('ارفع الملفين أولًا.'); return; }
   const wb = XLSX.utils.book_new();
@@ -492,7 +487,6 @@ document.getElementById('btnExcel').addEventListener('click', ()=>{
   XLSX.writeFile(wb, `مقارنة-كميات-${state.inv.date}.xlsx`);
 });
 
-/* ---------- export pdf ---------- */
 document.getElementById('btnPdf').addEventListener('click', async ()=>{
   if(!state._compareRows){ alert('ارفع الملفين أولًا.'); return; }
   const btn = document.getElementById('btnPdf');
@@ -547,7 +541,6 @@ document.getElementById('btnReset').addEventListener('click', ()=>{
   location.reload();
 });
 
-/* ---------- تذكرني ---------- */
 const LS_KEY = 'qtyCompareState_v1';
 function saveToLocalStorage(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
 function loadFromLocalStorage(){
@@ -570,7 +563,6 @@ document.getElementById('chkRememberFields').addEventListener('change', function
   } else { localStorage.removeItem(LS_KEY); }
 });
 
-/* ---------- initial ---------- */
 if(loadFromLocalStorage()){
   document.getElementById('chkRememberFields').checked = true;
   if(state.inv){ const st=document.getElementById('invStatus'); st.textContent = `✓ تم تحميل جرد يوم ${state.inv.date} (${state.inv.fileName})`; st.classList.add('show'); }
